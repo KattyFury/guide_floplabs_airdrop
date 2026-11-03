@@ -6,10 +6,10 @@
 Dành cho người **chưa biết code**. Repo cho bạn một **AI agent chạy được ngay**: máy tính bật
 là agent tự tìm việc trên [Kibble](https://kibble.world). Nó nhận việc, làm thật, nộp bài, và
 chấm bài của agent khác. Mọi thứ được ký bằng căn cước (DID) của bạn. Hôm nay agent dùng não
-OpenAI gần như miễn phí. Khi testnet **FLOP** ([@flop_labs](https://x.com/flop_labs)) mở,
-chỉ cần đổi não sang **mua compute FLOP**, và đó chính là việc được tính airdrop cho agent.
+OpenAI gần như miễn phí. Mục tiêu khi testnet **FLOP** ([@flop_labs](https://x.com/flop_labs)) mở
+là đổi não sang **mua compute FLOP**, vì đó là việc được tính airdrop cho agent. Repo chưa làm được bước này ([xem tình trạng devnet](#tinh-trang-devnet)).
 
-*Cập nhật 18/10/2026. Hướng dẫn cộng đồng, không phải Flop Labs. Thông tin có thể đổi.
+*Cập nhật 03/11/2026. Hướng dẫn cộng đồng, không phải Flop Labs. Thông tin có thể đổi.
 Luôn ưu tiên [flop.finance](https://flop.finance) và [@flop_labs](https://x.com/flop_labs).*
 
 ---
@@ -41,7 +41,14 @@ tiền cho máy GPU** để chạy AI. Không bán token trước. Thưởng cho
 | **2** | **Làm content** | Viết / quay video + điền form KOL | Chương trình creator / leaderboard (đang preview) |
 | **3** | **Có GPU (miner)** | Đăng ký miner, chuẩn bị máy | Testnet mở: máy chạy inference thật |
 
-Cả 3 hướng đều **chưa nhận tiền ngay**. Testnet chạy khoảng 90 ngày (dự kiến Q4/2026), mainnet khoảng Q1/2027.
+Cả 3 hướng đều **chưa nhận tiền ngay**. Testnet chạy khoảng 90 ngày, mục tiêu mở 3/11/2026 nhưng đây chưa phải ngày chốt (trang trạng thái lúc viết vẫn ghi "planned"). Mainnet khoảng Q1/2027.
+
+<a id="tinh-trang-devnet"></a>
+**Tình trạng devnet (đo 03/11/2026):** Flop đã mở devnet cho nhà phát triển. **Devnet không có thưởng, không tính airdrop, chain có thể bị đặt lại.**
+
+- Repo này **chưa gọi được API của FLOP**: faucet báo `503 IP classification unavailable` nên chưa xin được FLOP để lấy key ([issue #22](https://github.com/flop-labs/network/issues/22)). Agent trong repo vẫn dùng OpenAI.
+- Nếu muốn tự thử: lệnh chính thức là `npx --yes --package @flop-labs/cli@0.4.0 flop --network devnet agent credential --json`. Lệnh này tạo một ví devnet riêng trên máy bạn, lưu cụm từ khôi phục ở dạng chưa mã hoá, nên đừng dùng ví đó cho việc gì có giá trị.
+- Link chính thức: [Faucet](https://faucet.flop.network) · [Docs](https://docs.flop.network) · [Explorer](https://explorer.devnet.flop.network) · [Danh sách model](https://api.flop.network/v1/models).
 
 **Luật quan trọng (trang airdrop chính thức):** phần thưởng tính **từ dữ liệu trên testnet**.
 Nhận faucet thôi thì không được gì. Tài khoản bị đánh dấu **"làm cho có"** (manufactured activity) thì **mất trắng**.
@@ -83,7 +90,7 @@ Leaderboard KOL mới ở mức **xem trước**, chưa phải luật cuối.
 ## 5. Né lừa đảo (đọc 10 giây)
 
 - Chưa có FLOP để "claim" hôm nay. Ai bán "vào sớm / RPC / claim ngay" là lừa đảo.
-- Chỉ tin [flop.finance](https://flop.finance) và [@flop_labs](https://x.com/flop_labs).
+- Chỉ tin các link trong [flop.finance/official](https://flop.finance/official/). Token devnet không có giá trị, và FLOP chưa có token thật để mua bán.
 - Không gửi file khoá DID, file `agent/.env` cho ai.
 - Không chuyển tiền / seed ví cho "support".
 
@@ -101,6 +108,8 @@ Leaderboard KOL mới ở mức **xem trước**, chưa phải luật cuối.
 | [data/activity-log.md](data/activity-log.md) | Nhật ký chạy thử cũ (tháng 8–9) |
 
 **Nguồn chính thức:**
+[Link chính thức](https://flop.finance/official/) ·
+[Docs](https://docs.flop.network) ·
 [Airdrop](https://flop.finance/airdrop/) ·
 [Testnet](https://flop.finance/testnet/) ·
 [Agent](https://flop.finance/intro/agent/) ·
