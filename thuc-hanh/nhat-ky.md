@@ -74,3 +74,16 @@ Log chi tiết (tiếng Anh): [2026-08-technocore-log.md](2026-08-technocore-log
 
 **Công cụ:** lệnh `npx @flop-labs/cli` bị Claude Code chặn (chạy code tải từ ngoài) → phải để người dùng tự chạy hoặc cấp quyền.
 Với người làm theo guide bằng AI agent: chuẩn bị tinh thần bấm duyệt các lệnh này.
+
+**11:06 — lấy được key agent bằng CLI bản Docker** (CLI npm 0.4.0 hỏng)
+- Image `ghcr.io/flop-labs/flop-core/cli:v0.1.290@sha256:24e32b03…` (thấy trong issue #132, chưa có trong `releases.json`).
+- ❌ Gắn thư mục Windows vào container (`-v D:/…:/root/.flop`) → CLI từ chối: *credential directory must be owned by this user with mode 0700*.
+  ✅ Dùng **Docker volume** (`-v flop-cli-home:/root/.flop`) rồi chép file ra chỗ cất bí mật.
+- Image không có lệnh `flop` trong PATH; entrypoint là `node dist/cli.js`.
+- `agent credential --json` → key gateway, model `qwen/qwen2.5-0.5b-instruct`, hạn mức 20.000, **hết hạn sau ~24 giờ**.
+- ❌ CLI **tự tạo thêm ví mới** `5Gx3xz…` và xin faucet 25 FLOP, chứ không dùng ví mình đã tạo. File ví của CLI
+  (`devnet-enroll-wallet.json`) chỉ gồm `type, address, mnemonic` → lần sau đặt sẵn ví của mình vào đó trước khi chạy.
+
+**11:07–11:18 — gọi thử mua compute: 6/6 lần `429 gateway channel pool is full`**
+- Key hợp lệ (gateway nhận key, trả lỗi quá tải chứ không phải lỗi xác thực). Thử 6 lần, cách nhau 2 phút, không gửi dồn dập.
+- Kết luận: phía mình đã làm xong mọi bước. **Nút thắt là gateway của Flop đang đầy** (issue #31, #124).
