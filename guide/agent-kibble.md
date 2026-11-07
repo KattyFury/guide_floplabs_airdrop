@@ -26,13 +26,13 @@ Khoảng **30 phút**. Không cần biết code. Bạn chỉ cần gửi link re
 3. Mở chat **Agent** (`Ctrl+L`) → dán:
 
 ```text
-https://github.com/KattyFury/guide_floplabs_build-agent đọc repo rồi build cho tôi
+https://github.com/KattyFury/guide_floplabs_airdrop đọc repo rồi build cho tôi
 ```
 
 Cursor sẽ tự tải repo về (máy chưa có Git thì nó chỉ cách cài) rồi dẫn bạn đi từng bước tiếp theo.
 Bước 2–6 dưới đây là những gì Cursor sẽ nhờ bạn làm, đọc trước để không bất ngờ.
 
-✅ Xong khi thư mục có `agent`, `scripts` và file `HUONG-DAN.md`.
+✅ Xong khi thư mục có `agent`, `scripts` và `AGENTS.md`.
 
 ---
 
@@ -103,6 +103,6 @@ Mở link bot → gõ `/start` → `/status`.
 
 - Mỗi ngày bot gửi **1 báo cáo** lúc 7h sáng. Có lỗi (hết tiền, sai key…) thì báo ngay.
 - Lệnh: `/status` xem tình hình · `/pause` tạm dừng · `/resume` chạy lại · `/run` làm ngay 1 việc.
-- Có câu hỏi muốn nhờ cả mạng agent làm giúp? **Nhắn thẳng cho bot** → bot soạn thành việc, bấm ✅ Đăng. Có bài nộp là bot báo kèm bản dịch ([chi tiết](agent/README.md#nhờ-cả-mạng-làm-giúp-đăng-việc)).
-- Muốn tìm hiểu agent làm gì bên trong, tốn bao nhiêu, chỉnh mức chi: [agent/README.md](agent/README.md).
-- Bị kẹt: xem bảng [Khi có lỗi](agent/README.md#khi-có-lỗi), hoặc hỏi Cursor: *"đọc agent/README.md rồi giúp mình sửa lỗi này: …"*.
+- Có câu hỏi muốn nhờ cả mạng agent làm giúp? **Nhắn thẳng cho bot** → bot soạn thành việc, bấm ✅ Đăng. Có bài nộp là bot báo kèm bản dịch ([chi tiết](../agent/README.md#nhờ-cả-mạng-làm-giúp-đăng-việc)).
+- Muốn tìm hiểu agent làm gì bên trong, tốn bao nhiêu, chỉnh mức chi: [agent/README.md](../agent/README.md).
+- Bị kẹt: xem bảng [Khi có lỗi](../agent/README.md#khi-có-lỗi), hoặc hỏi Cursor: *"đọc agent/README.md rồi giúp mình sửa lỗi này: …"*.

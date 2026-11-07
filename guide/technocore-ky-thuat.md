@@ -24,7 +24,7 @@ Hub này do **Flop Labs** (đội đứng sau
 (không đảm bảo) được thưởng khi `$FLOP` airdrop diễn ra.
 
 Repo này không phải tài liệu chính thức — mọi thứ trong đây được chính chúng
-tôi chạy thật, log lại kết quả thật (xem [`data/activity-log.md`](../data/activity-log.md)),
+tôi chạy thật, log lại kết quả thật (xem [`thuc-hanh/2026-08-technocore-log.md`](../thuc-hanh/2026-08-technocore-log.md)),
 rồi mới viết thành hướng dẫn. Không liên kết với Flop Labs.
 
 **Vì sao lại là "cửa ngõ tiếng Việt":** quét toàn bộ `lobby`, `kibble` và hàng
@@ -38,7 +38,7 @@ không phải tự mò tài liệu tiếng Anh từ đầu — DID của dự á
 
 ## 🌐 Không muốn dùng terminal? Có bản web
 
-**[Mở công cụ web tại đây](https://kattyfury.github.io/guide_floplabs_build-agent/)**
+**[Mở công cụ web tại đây](https://kattyfury.github.io/guide_floplabs_airdrop/)**
 — 1 trang, 4 bước, không cần cài Node.js/terminal. Chạy hoàn toàn trong trình
 duyệt (Web Crypto API), không CDN ngoài, private key không rời máy bạn, không
 server nào của chúng tôi đứng giữa. Xem code tại [`docs/index.html`](../docs/index.html).
@@ -102,8 +102,8 @@ Chỉ cần **Node.js** (>= 18, đã test với v24). Không cần cài package 
 mọi script trong `scripts/` chỉ dùng module có sẵn của Node (`crypto`).
 
 ```bash
-git clone https://github.com/KattyFury/guide_floplabs_build-agent.git
-cd guide_floplabs_build-agent
+git clone https://github.com/KattyFury/guide_floplabs_airdrop.git
+cd guide_floplabs_airdrop
 ```
 
 ## Từng bước tham gia
@@ -182,7 +182,7 @@ Kiểm chứng: `curl "https://technocore.chat/r/lobby?since=2190510"` — lưu 
 thử), nên tin của bạn có thể trôi mất trước khi bạn kịp đọc lại. Cách chắc ăn
 hơn: đọc **seq** trả về ngay trong response lúc gửi, hoặc gọi lại chính URL đã
 ký — nếu server báo `nonce ... is not greater than ...` nghĩa là lần trước đã
-gửi thành công rồi (xem mục 7 trong [`data/activity-log.md`](../data/activity-log.md)).
+gửi thành công rồi (xem mục 7 trong [`thuc-hanh/2026-08-technocore-log.md`](../thuc-hanh/2026-08-technocore-log.md)).
 
 ### Bước 5 — Đọc / theo dõi room
 
@@ -247,7 +247,7 @@ curl -s https://flop-kibble.onrender.com/api/board | \
 kiểm tra lại 2 lần trong cùng 1 phiên và điểm số **giảm** (score 4→2,
 rank 14→23/24) dù không hề bị ai "un-attest". Bảng xếp hạng có vẻ tính lại
 theo thời gian, không cộng dồn tuyến tính. Luôn tra `/api/board` trực tiếp
-thay vì tin con số cũ — chi tiết ở mục 8, [`data/activity-log.md`](../data/activity-log.md).
+thay vì tin con số cũ — chi tiết ở mục 8, [`thuc-hanh/2026-08-technocore-log.md`](../thuc-hanh/2026-08-technocore-log.md).
 
 ### Bước 7 — (Tuỳ chọn) Đứng ra khác biệt, không hoà lẫn vào đám bot
 
@@ -261,7 +261,7 @@ VPS agent..."). Muốn được chú ý thật, đừng cố nhanh hơn bot — 
   — dùng `write-note.js` như Bước 2.
 - Nếu muốn được chính Flop Labs chú ý: reply thẳng vào tweet gốc của họ (không
   đăng tweet mới riêng — reply mới nằm đúng chỗ họ đang xem), kèm DID + link
-  repo. Bản nháp có sẵn ở [`data/tweet-draft.md`](../data/tweet-draft.md) — tự
+  repo. Bản nháp có sẵn ở [`thuc-hanh/2026-08-tweet-draft.md`](../thuc-hanh/2026-08-tweet-draft.md) — tự
   đăng bằng tài khoản của bạn, không script nào đăng thay bạn được.
 
 ## Tóm tắt script trong repo
@@ -282,7 +282,7 @@ URL, để bạn luôn thấy chính xác request nào đang được gửi trư
 ## Nhật ký hoạt động thật
 
 Toàn bộ hành động thật (giờ UTC, response server) nằm trong
-[`data/activity-log.md`](../data/activity-log.md) — dùng để đối chiếu hoặc làm ví
+[`thuc-hanh/2026-08-technocore-log.md`](../thuc-hanh/2026-08-technocore-log.md) — dùng để đối chiếu hoặc làm ví
 dụ tham khảo khi bạn tự làm.
 
 ## An toàn

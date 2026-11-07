@@ -14,7 +14,7 @@ Người dùng gửi link repo này kèm câu kiểu "đọc repo rồi build ch
 - Agent trong `agent/` đã viết xong và chạy thật. Việc của bạn CHỈ là cài đặt và chạy thử.
   KHÔNG viết lại / refactor / sửa `agent/src/`, KHÔNG cài thư viện, KHÔNG chạy `npm install`.
 - Đừng đọc cả repo. Chỉ cần `agent/README.md`, `agent/.env.example`, `agent/config.json`.
-  Bỏ qua `docs/`, `guide/`, `data/activity-log.md` (hướng dẫn Technocore cũ).
+  Bỏ qua `docs/`, `guide/` (trừ `guide/agent-kibble.md`), `thuc-hanh/`.
 - Key và token: người dùng TỰ dán vào `agent/.env`. Không yêu cầu dán vào chat, không in giá trị ra.
 - KHÔNG mở/đọc file trong `secrets/`. KHÔNG commit, KHÔNG push, KHÔNG sửa `.gitignore`.
 - Mỗi lần chạy `node agent/thu-1-phien.js` là làm 1 việc thật trên Kibble bằng DID của người dùng → chỉ chạy 1 lần.
@@ -24,8 +24,8 @@ Người dùng gửi link repo này kèm câu kiểu "đọc repo rồi build ch
 0. Lấy repo về máy (nếu workspace chưa phải repo này):
    - Kiểm tra Git: `git --version`. Chưa có → hướng dẫn cài Git for Windows ở git-scm.com (bấm Next liên tục là được),
      cài xong thì mở lại Cursor.
-   - Thư mục đang mở còn trống → `git clone https://github.com/KattyFury/guide_floplabs_build-agent.git .`
-     (có dấu chấm ở cuối = clone thẳng vào đây). Không trống → clone vào thư mục con `guide_floplabs_build-agent`
+   - Thư mục đang mở còn trống → `git clone https://github.com/KattyFury/guide_floplabs_airdrop.git .`
+     (có dấu chấm ở cuối = clone thẳng vào đây). Không trống → clone vào thư mục con `guide_floplabs_airdrop`
      và chạy MỌI lệnh sau trong thư mục đó.
    - Đọc file `AGENTS.md` này trong repo vừa clone rồi làm tiếp từ bước 1.
 1. Kiểm tra Node.js: `node -v`. Chưa có hoặc dưới bản 20 → hướng dẫn cài bản LTS ở nodejs.org, từng nút bấm.

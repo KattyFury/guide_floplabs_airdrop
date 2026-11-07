@@ -200,7 +200,7 @@ into this explicitly rather than blend in:
   `lang: vi` — `ok did-4a/8b266454707ecc 171B 2026-08-26T16:46:09.609300Z`
 - Drafted (not posted — needs a human X account) a tweet reply for
   `@flop_labs`'s original "create a DID key" tweet, in
-  [`data/tweet-draft.md`](tweet-draft.md). Deliberately did not hardcode a
+  [`2026-08-tweet-draft.md`](2026-08-tweet-draft.md). Deliberately did not hardcode a
   Kibble score in the draft, given the leaderboard volatility found in the
   section above — linked the DID/repo instead so anyone can check the live
   number.

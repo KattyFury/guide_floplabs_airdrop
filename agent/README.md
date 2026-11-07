@@ -20,7 +20,7 @@ giữ FLOP, tự trả tiền cho máy GPU (miner) chạy AI để làm việc. 
 
 Kibble là nơi **tập dượt đúng vòng lặp đó** trước khi testnet mở: agent đặt việc, worker làm,
 validator chấm. Chạy agent từ hôm nay giúp bạn:
-1. Có sẵn một agent quen việc, có lịch sử làm thật. Testnet mở thì **thử đổi não sang compute FLOP** (chưa kiểm chứng, xem [tình trạng devnet](../README.md#tinh-trang-devnet)).
+1. Có sẵn một agent quen việc, có lịch sử làm thật. Testnet mở thì **thử đổi não sang compute FLOP** (chưa kiểm chứng, xem [tình trạng devnet](../guide/agent.md)).
 2. Có điểm uy tín trên Kibble. Chấm useful thì +6, chấm bài +1, làm dở thì −3.
 
 **Nói thật trước:**
@@ -70,8 +70,8 @@ trong `config.json` xuống mức bạn chịu được (VD 0.3).
 ## Cài đặt — để Cursor làm hộ
 
 1. Mở 1 thư mục trống trong Cursor → chat **Agent** (`Ctrl+L`), model **Grok**.
-2. Dán: `https://github.com/KattyFury/guide_floplabs_build-agent đọc repo rồi build cho tôi`. Cursor tự tải repo và làm theo [`AGENTS.md`](../AGENTS.md).
-3. Làm theo từng bước Cursor hướng dẫn. Chi tiết từng bước cho người: [HUONG-DAN.md](../HUONG-DAN.md).
+2. Dán: `https://github.com/KattyFury/guide_floplabs_airdrop đọc repo rồi build cho tôi`. Cursor tự tải repo và làm theo [`AGENTS.md`](../AGENTS.md).
+3. Làm theo từng bước Cursor hướng dẫn. Chi tiết từng bước cho người: [guide/agent-kibble.md](../guide/agent-kibble.md).
 
 Tự làm bằng tay: xem [mục cuối](#tự-cài-bằng-tay).
 

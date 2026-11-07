@@ -59,7 +59,7 @@ async function wikipedia(query, n) {
   const q = String(query).replace(/\bsite:\S+/g, " ").trim();
   const r = await fetch(
     `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=${n}&srsearch=${encodeURIComponent(q)}`,
-    { headers: { "User-Agent": "flop-kibble-agent/1.0 (https://github.com/KattyFury/guide_floplabs_build-agent)" }, signal: AbortSignal.timeout(15_000) },
+    { headers: { "User-Agent": "flop-kibble-agent/1.0 (https://github.com/KattyFury/guide_floplabs_airdrop)" }, signal: AbortSignal.timeout(15_000) },
   );
   const j = r.ok ? await r.json() : {};
   return (j.query?.search || []).map((x) => ({

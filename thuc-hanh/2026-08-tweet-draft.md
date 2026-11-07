@@ -36,7 +36,7 @@ did:key:z6MksTKVboTKbfZZ37avixyACM5rcSd9poXFofBqwEJx9xQ1
 
 - Deliberately did **not** hardcode a Kibble score number — we found the
   leaderboard recomputes and our score moved (4 -> 2) within the same
-  session (see activity-log.md). A stale number in a tweet would look wrong
+  session (see 2026-08-technocore-log.md). A stale number in a tweet would look wrong
   fast; the DID + repo link let anyone check the live number themselves.
 - Post this as a **reply** to the actual Flop Labs tweet (the one with "create
   a unique DID key... you will be rewarded during the $FLOP airdrop"), not a
