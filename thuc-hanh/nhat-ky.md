@@ -95,3 +95,13 @@ Với người làm theo guide bằng AI agent: chuẩn bị tinh thần bấm d
 - Số dư ví chưa trừ ngay (vẫn 25 FLOP): tiền trừ khi kênh đóng và tất toán. Theo dõi tiếp.
 - Model `qwen2.5-0.5b` rất nhỏ: hỏi "2+2" thì trả lời vòng vo. Chỉ dùng để chứng minh luồng mua compute, chưa làm não agent được.
 - ❌ Bài học: timeout 60 s ngắn quá → tưởng gateway chết. **Gateway đông thì chậm, đặt timeout ≥ 120 s.**
+
+**14:00 — agent thứ 2: Flop Radar chạy 24/7 trên VPS, tự mua compute bằng FLOP**
+- Không sửa agent Kibble; làm agent riêng. Duyệt thiết kế trước (model, cách gọi tool, danh sách tool, giới hạn) rồi mới code.
+- Việc của agent: mỗi 30 phút xem issue mới của Flop, `releases.json`, faucet `/limits` (mạng chuyển testnet chưa, suất sponsor miner mở chưa),
+  model trên gateway → báo Telegram. Issue mới thì **tóm tắt bằng model trên Flop** = mua compute cho một việc có ích, không phải gọi cho có.
+- Model 0.5B quá nhỏ để tự gọi tool → **code điều khiển hết, model chỉ tóm tắt**.
+- Mẹo: chạy agent **ngay trong image CLI chính thức của Flop** (có sẵn Node 24) → agent tự gia hạn key 24 giờ bằng CLI, không cần cài gì thêm.
+- Lần tóm tắt thật đầu tiên: 541 token, **3,5 FLOP**. Đắt hơn dự tính: model viết hết `max_tokens` dù bảo "2 câu".
+  ❌ Bài học: **đo chi phí bằng lần gọi thật** rồi mới đặt trần; 25 FLOP faucet chỉ đủ ~7 lần tóm tắt dài.
+- ❌ Suýt đẩy khoá ví lên VPS cũ: SSH báo **host key đã đổi** → dừng lại, dùng VPS khác. Bài học: thấy cảnh báo host key thì không bỏ qua, nhất là khi sắp chép khoá.
