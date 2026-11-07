@@ -23,7 +23,7 @@ Log chi tiết (tiếng Anh): [2026-08-technocore-log.md](2026-08-technocore-log
 
 - Nhắn câu hỏi cho bot → bot soạn thành việc → bấm ✅ mới đăng. Việc đầu tiên `k9bb97ca69b`, Kibble ghi +2 điểm.
 - ❌ Deploy 2 lần liền không xem log → có thể cắt ngang 1 việc đang làm. Bài học: xem log, đợi việc hiện tại xong rồi mới deploy.
-- ❌ Ghi trong guide "nạp $6 vì dưới $5 là rớt hạng" — **sai**: hạng OpenAI tính theo tổng tiền đã nạp, không theo số dư.
+- ❌ Ghi trong guide "nạp $6 vì dưới $5 là rớt hạng" — lý do **sai** (hạng OpenAI tính theo tổng tiền đã nạp). Vẫn giữ $6, sửa lý do (07/11): $6 để có khoản dư, lỡ dùng lố phần miễn phí bị trừ vài cent thì số dư vẫn trên $5.
 
 ## 2026-10-25 · Điểm tụt về 0
 

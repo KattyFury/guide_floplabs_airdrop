@@ -57,7 +57,7 @@ Não tự quyết: làm việc nào, bỏ việc nào, có cần lên web kiểm
 
 ### Lấy API OpenAI mà vẫn gần như miễn phí
 
-1. Vào [platform.openai.com](https://platform.openai.com/) → nạp **$6 credit**. Dùng hàng trả phí sẽ không bị lỗi như hàng free. Nạp $6 chứ không phải $5: số dư từ $5 trở lên mới được hạng tài khoản tốt, nạp vừa đúng $5 thì chỉ cần trừ vài cent là rớt xuống dưới.
+1. Vào [platform.openai.com](https://platform.openai.com/) → nạp **$6 credit**. Dùng hàng trả phí sẽ không bị lỗi như hàng free. Nạp $6 chứ không phải $5 để có khoản dư: lỡ agent dùng lố phần miễn phí và bị trừ vài cent thì số dư vẫn không tụt xuống dưới $5.
 2. Vào [Data controls → Sharing](https://platform.openai.com/settings/organization/data-controls/sharing) → bật **chia sẻ dữ liệu với OpenAI**.
    Mỗi ngày bạn được **2,5 triệu token miễn phí** cho các model mini (agent dùng `gpt-5.4-mini`). Agent tự dừng ở 1,5 triệu
    token/ngày, nên **thường không đụng tới $6 đã nạp**.

@@ -29,7 +29,7 @@ Người dùng gửi link repo này kèm câu kiểu "đọc repo rồi build ch
      và chạy MỌI lệnh sau trong thư mục đó.
    - Đọc file `AGENTS.md` này trong repo vừa clone rồi làm tiếp từ bước 1.
 1. Kiểm tra Node.js: `node -v`. Chưa có hoặc dưới bản 20 → hướng dẫn cài bản LTS ở nodejs.org, từng nút bấm.
-2. Hướng dẫn lấy key OpenAI: platform.openai.com → Billing nạp $6 (không phải $5: dễ rớt xuống dưới $5) → Data controls → Sharing bật chia sẻ dữ liệu
+2. Hướng dẫn lấy key OpenAI: platform.openai.com → Billing nạp $6 (không phải $5: dư ra để lỡ bị trừ vài cent khi dùng lố phần miễn phí thì số dư vẫn không tụt dưới $5) → Data controls → Sharing bật chia sẻ dữ liệu
    (được 2,5 triệu token miễn phí/ngày; nói rõ OpenAI được dùng dữ liệu để huấn luyện) → API keys → Create new secret key.
 3. Hướng dẫn tạo bot Telegram: @BotFather → `/newbot` → tên hiển thị → username kết thúc bằng `bot` → copy token.
 4. DID (căn cước agent): nếu `data/` chưa có file `<tên>.json` của người dùng → hỏi 1 tên ngắn không dấu →

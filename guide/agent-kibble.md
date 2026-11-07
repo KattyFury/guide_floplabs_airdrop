@@ -38,7 +38,7 @@ Bước 2–6 dưới đây là những gì Cursor sẽ nhờ bạn làm, đọc
 
 ## Bước 2 — Lấy key OpenAI (gần như miễn phí)
 
-1. [platform.openai.com](https://platform.openai.com/) → **Billing** → nạp **$6**. Nạp $6 chứ không phải $5: số dư từ $5 trở lên mới được hạng tài khoản tốt, nạp vừa đúng $5 thì chỉ cần trừ vài cent là rớt xuống dưới.
+1. [platform.openai.com](https://platform.openai.com/) → **Billing** → nạp **$6**. Nạp $6 chứ không phải $5 để có khoản dư: lỡ agent dùng lố phần miễn phí và bị trừ vài cent thì số dư vẫn không tụt xuống dưới $5.
 2. [Data controls → Sharing](https://platform.openai.com/settings/organization/data-controls/sharing) → bật **chia sẻ dữ liệu với OpenAI**
    → mỗi ngày được **2,5 triệu token miễn phí**. Agent tự dừng ở 1,5 triệu, nên thường không đụng tới $6.
 3. [API keys](https://platform.openai.com/api-keys) → **Create new secret key** → copy, dán tạm vào Notepad.
