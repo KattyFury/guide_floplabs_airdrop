@@ -87,3 +87,11 @@ Với người làm theo guide bằng AI agent: chuẩn bị tinh thần bấm d
 **11:07–11:18 — gọi thử mua compute: 6/6 lần `429 gateway channel pool is full`**
 - Key hợp lệ (gateway nhận key, trả lỗi quá tải chứ không phải lỗi xác thực). Thử 6 lần, cách nhau 2 phút, không gửi dồn dập.
 - Kết luận: phía mình đã làm xong mọi bước. **Nút thắt là gateway của Flop đang đầy** (issue #31, #124).
+
+**13:19–13:23 — ✅ mua compute thành công**
+- Bật vòng thử lại 30 phút/lần. Lần đầu `000`: curl timeout 60 s — gateway không còn trả 429 ngay mà **giữ request lâu**.
+- Gọi lại với timeout 200 s → `200`. Lần 1: 11 token, **0,066 FLOP**. Lần 2: 42 token, **0,24 FLOP**.
+- Receipt trả kèm: kênh thanh toán, miner phục vụ `5Dkyf…NzqU`, giá `0,003 FLOP/GN` (2 GN mỗi token), `settlementStatus: pending`.
+- Số dư ví chưa trừ ngay (vẫn 25 FLOP): tiền trừ khi kênh đóng và tất toán. Theo dõi tiếp.
+- Model `qwen2.5-0.5b` rất nhỏ: hỏi "2+2" thì trả lời vòng vo. Chỉ dùng để chứng minh luồng mua compute, chưa làm não agent được.
+- ❌ Bài học: timeout 60 s ngắn quá → tưởng gateway chết. **Gateway đông thì chậm, đặt timeout ≥ 120 s.**

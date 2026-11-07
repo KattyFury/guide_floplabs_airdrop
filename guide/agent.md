@@ -38,15 +38,22 @@ Trang web faucet có thêm xác minh người thật (Passport, BrightID…) đ�
 3. **Gọi thử 1 lần** `POST https://api.flop.network/v1/chat/completions` bằng key vừa lấy. Gọi được = agent đã "mua compute".
 4. **Cho agent của bạn dùng key đó làm "não"** thay cho OpenAI/Claude. Agent mẫu trong repo này: [agent-kibble.md](agent-kibble.md).
 
-## ⚠️ Tình trạng 07/11/2026: bước 1 và 3 đang hỏng phía Flop
+## Tình trạng 07/11/2026: làm được, nhưng đi đường vòng
 
-- `@flop-labs/cli` và `@flop-labs/sdk` bản 0.4.0 trên npm **không chạy** với devnet sau nâng cấp runtime
-  ([issue #132](https://github.com/flop-labs/network/issues/132)).
-- `api.flop.network/v1/models` đang trả **danh sách rỗng**, gateway báo đầy (429)
-  ([#124](https://github.com/flop-labs/network/issues/124)).
-- Faucet thì **đang chạy**: người viết guide xin được 25 FLOP cho ví mới ngày 07/11.
-
-→ Việc nên làm ngay: tạo ví, xin faucet, cài sẵn agent. Khi Flop sửa xong thì chỉ còn bước lấy key và đổi não.
+- `@flop-labs/cli` bản 0.4.0 trên npm **không chạy** với devnet ([issue #132](https://github.com/flop-labs/network/issues/132)).
+  **Dùng bản Docker thay thế** (cần Docker; trên Windows dùng Git Bash):
+  ```bash
+  IMG=ghcr.io/flop-labs/flop-core/cli@sha256:24e32b034b0d3600ee28127dad30d4228e623235f2dc62da34c2c85ba5e21a88  # v0.1.290
+  MSYS_NO_PATHCONV=1 docker run --rm -v flop-cli-home:/root/.flop --entrypoint sh $IMG     -c 'chmod 700 /root/.flop && exec node dist/cli.js --network devnet agent credential --json'
+  ```
+  Phải dùng Docker volume (`flop-cli-home`), **không** gắn thư mục Windows: CLI đòi thư mục quyền 0700.
+  Key và ví nằm trong volume; chép ra chỗ cất bí mật:
+  `docker run --rm -v flop-cli-home:/f -v "<thư mục bí mật>":/out alpine cp -r /f/. /out/`
+- Gateway lúc đông trả `429 gateway channel pool is full` ([#124](https://github.com/flop-labs/network/issues/124)):
+  thử lại sau 30–60 phút, đừng gửi dồn. Lúc có chỗ thì phản hồi **chậm** → đặt timeout ≥ 120 giây (60 giây là hụt).
+- Gọi được thì kết quả có `usage.cost_flop` và `x_flop_receipt` (kênh, miner, `settlementStatus`).
+  `pending` nghĩa là chưa tất toán; airdrop chỉ tính **phiên đã settle**.
+- Người viết guide: 6 lần 429 buổi sáng, **13:21 UTC gọi thành công**, 2 lần tốn 0,066 + 0,24 FLOP.
 
 ## Trong lúc chờ: Agent Kibble
 

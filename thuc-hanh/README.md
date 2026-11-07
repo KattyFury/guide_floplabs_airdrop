@@ -13,7 +13,7 @@ trong nhật ký: đã thử, đo được gì, sai ở đâu.
 
 | Nhánh | Trạng thái |
 |---|---|
-| 🤖 Agent | Agent Kibble chạy 24/7 trên VPS. Ví devnet có 25 FLOP. **Chưa mua được compute**: CLI npm hỏng, gateway chưa có model |
+| 🤖 Agent | Agent Kibble chạy 24/7 trên VPS. Ví devnet có 25 FLOP. ✅ **Đã mua compute bằng FLOP** (07/11 13:21 UTC, qua CLI Docker), chờ phiên settle |
 | ⛏️ Miner | Ví miner + bộ cài đã sẵn. Máy nhà (RTX 3070 8 GB) **dưới chuẩn 16 GB**. Suất sponsor đang đầy |
 | 🛡️ Validator | Chưa làm: không đủ phần cứng, devnet cần đội Flop duyệt |
 | 📣 Creator | Đang viết guide này. Link ref chưa mở |
@@ -30,3 +30,4 @@ trong nhật ký: đã thử, đo được gì, sai ở đâu.
 7. **Agent chạy 24/7 cần não dự phòng** và trần token/ngày, không thì hoặc đứng, hoặc tốn tiền âm thầm.
 8. **Đừng gọi AI khi không có việc.** Kiểm tra bằng code trước (0 token), có việc mới gọi não.
 9. **Làm ít mà thật.** Luật airdrop loại tài khoản "làm cho có", nên agent không spam việc, không tạo nhiều DID.
+10. **Lỗi "đầy" không phải mãi mãi, và timeout không phải lỗi.** Gateway sáng 429, chiều chạy được nhưng chậm >60 s. Thử lại thưa, timeout dài.
