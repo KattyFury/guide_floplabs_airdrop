@@ -1,64 +1,64 @@
-# Tham gia airdrop Flop Labs ($FLOP) — hướng dẫn tiếng Việt
+# Join the Flop Labs ($FLOP) airdrop: community guide
 
-> 🤖 **Dành cho AI (Cursor…):** người dùng nhờ "đọc repo rồi build" = **cài Agent Kibble có sẵn trong repo này**, không viết code mới.
-> Làm đúng từng bước trong [`AGENTS.md`](AGENTS.md).
+> 🤖 **For AI assistants (Cursor etc.):** if the user says "read the repo and build", that means **install the Agent Kibble already in this repo**. Do not write new code.
+> Follow [`AGENTS.md`](AGENTS.md) step by step.
 
-`$FLOP` là tiền của **Flop Network** (Flop Labs / Arthur Hayes): mạng nơi **AI agent trả tiền cho máy GPU** để chạy AI.
-Không bán token trước. Toàn bộ 4,4 tỷ $FLOP lúc ra mắt chia cho người **làm việc thật trên testnet**.
+`$FLOP` is the token of **Flop Network** (Flop Labs / Arthur Hayes), a network where **AI agents pay GPU machines** to run AI.
+There is no token sale. All 4.4 billion $FLOP at launch goes to people who **do real work on testnet**.
 
-*Cập nhật 07/11/2026. Hướng dẫn cộng đồng, không phải Flop Labs. Luôn ưu tiên [flop.finance](https://flop.finance/official/) và [@flop_labs](https://x.com/flop_labs).*
+*Updated 2026-11-07. Community guide, not from Flop Labs. Always prefer [flop.finance](https://flop.finance/official/) and [@flop_labs](https://x.com/flop_labs).*
 
 ---
 
-## Repo có 2 phần
+## Two parts
 
-### 📘 1. [Guide](guide/README.md) — bạn nên tham gia thế nào
+### 📘 1. [Guide](guide/README.md): how you should take part
 
-Chọn nhánh hợp với mình, xem cần gì, làm theo từng bước:
+Pick a track, see what it needs, follow the steps:
 
-| Nhánh | Hợp với ai | Hướng dẫn |
+| Track | Good for | Guide |
 |---|---|---|
-| 🤖 **Agent** | Ai cũng làm được, không cần máy mạnh | [guide/agent.md](guide/agent.md) |
-| ⛏️ **Miner** | Có GPU NVIDIA ≥ 16 GB VRAM, hoặc thuê GPU | [guide/miner.md](guide/miner.md) |
-| 🛡️ **Validator** | Có / thuê server mạnh, quen chạy node | [guide/validator.md](guide/validator.md) |
-| 📣 **Creator** | Có cộng đồng, kéo người dùng thật (ref to earn) | [guide/creator.md](guide/creator.md) |
+| 🤖 **Agent** | Anyone, no strong machine needed | [guide/agent.md](guide/agent.md) |
+| ⛏️ **Miner** | NVIDIA GPU with ≥ 16 GB VRAM, or rented GPU | [guide/miner.md](guide/miner.md) |
+| 🛡️ **Validator** | Own or rent a strong server, used to running nodes | [guide/validator.md](guide/validator.md) |
+| 📣 **Creator** | Has a community and brings real users (ref to earn) | [guide/creator.md](guide/creator.md) |
 
-👉 **[Bắt đầu: chọn nhánh](guide/README.md)** · Cài agent mẫu chạy nền trên máy: [guide/agent-kibble.md](guide/agent-kibble.md)
+👉 **[Start: pick a track](guide/README.md)** · Install the sample background agent: [guide/agent-kibble.md](guide/agent-kibble.md)
 
-### 🧪 2. [Thực hành](thuc-hanh/README.md) — người viết đã làm thật thế nào
+### 🧪 2. [Practice](thuc-hanh/README.md): what the author actually did
 
-Nhật ký tham gia của chính người viết guide: đã thử gì, đo được gì, **sai ở đâu** và rút ra bài học gì.
-Guide được viết từ phần này.
-
----
-
-## Tình hình hôm nay (07/11/2026)
-
-- **Testnet chưa mở** (dự kiến Q4/2026, ~90 ngày). Mainnet dự kiến Q1/2027.
-- **Devnet đang mở cho mọi người** để tập, **không có thưởng**, chain có thể bị đặt lại.
-- Faucet chạy được. Nhưng mua compute (gọi AI) chưa được: CLI trên npm lệch phiên bản, gateway chưa có model.
-- Chi tiết từng nhánh ghi ở đầu mỗi trang guide.
-
-## Né lừa đảo (đọc 10 giây)
-
-- Chưa có $FLOP thật để "claim" hay mua bán. Ai bán "vào sớm / whitelist / RPC / claim ngay" là lừa đảo.
-- Chỉ tin link trong [flop.finance/official](https://flop.finance/official/).
-- Không gửi seed, mnemonic, file khoá DID, file `agent/.env` cho ai, kể cả "support".
+The author's own log: what was tried, what was measured, **what went wrong**, and the lessons.
+The guide is written from this part.
 
 ---
 
-## Thư mục
+## Status today (2026-11-07)
 
-| Đường dẫn | Dùng để |
+- **Testnet is not open** (expected Q4 2026, ~90 days). Mainnet expected Q1 2027.
+- **Devnet is open to everyone** for practice. **No rewards**, and the chain may be reset.
+- The faucet works. Buying compute (calling AI) does not yet: the npm CLI is on a mismatched version and the gateway has no model.
+- Each guide page starts with its track's details.
+
+## Avoid scams (10 seconds)
+
+- There is no real $FLOP to "claim" or trade. Anyone selling "early access / whitelist / RPC / claim now" is a scammer.
+- Trust only links on [flop.finance/official](https://flop.finance/official/).
+- Never send your seed, mnemonic, DID key file or `agent/.env` to anyone, including "support".
+
+---
+
+## Folders
+
+| Path | Purpose |
 |---|---|
-| [guide/](guide/README.md) | Hướng dẫn 4 nhánh + cài Agent Kibble ([agent-kibble.md](guide/agent-kibble.md)) |
-| [thuc-hanh/](thuc-hanh/README.md) | Nhật ký làm thật, sai lầm, bài học |
-| [agent/](agent/README.md) | Code Agent Kibble (cài theo guide/agent-kibble.md) |
-| [scripts/](scripts/) | Tạo DID, ký tin nhắn TechnoCore |
-| [AGENTS.md](AGENTS.md) | Hướng dẫn cho Cursor cài agent (Cursor tự đọc) |
+| [guide/](guide/README.md) | The 4 tracks + Agent Kibble install ([agent-kibble.md](guide/agent-kibble.md)) |
+| [thuc-hanh/](thuc-hanh/README.md) | Real log, mistakes, lessons |
+| [agent/](agent/README.md) | Agent Kibble code (install via guide/agent-kibble.md) |
+| [scripts/](scripts/) | Create a DID, sign TechnoCore messages |
+| [AGENTS.md](AGENTS.md) | Agent install instructions for Cursor (it reads this itself) |
 
-**Nguồn chính thức:**
-[Link chính thức](https://flop.finance/official/) · [Docs](https://docs.flop.network) · [Hỏi đáp](https://ask.flop.finance) ·
+**Official sources:**
+[Official links](https://flop.finance/official/) · [Docs](https://docs.flop.network) · [Q&A](https://ask.flop.finance) ·
 [Airdrop](https://flop.finance/airdrop/) · [Testnet](https://flop.finance/testnet/) · [Faucet](https://faucet.flop.network) ·
 [Explorer](https://explorer.devnet.flop.network) · [Kibble llms.txt](https://kibble.world/llms.txt)
 

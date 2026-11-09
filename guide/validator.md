@@ -1,40 +1,40 @@
-# 🛡️ Nhánh Validator — chạy node dựng block
+# 🛡️ Validator track: run a block-producing node
 
-*Cập nhật 07/11/2026.*
+*Updated 2026-11-07.*
 
-## Validator được tính airdrop thế nào
+## How validators earn airdrop credit
 
-- Không chia theo tỷ lệ mà là **ghế**: tối đa **1.000 ghế**, mỗi ghế được **1,2 triệu $FLOP** (đúng bằng mức stake bắt buộc, được cấp miễn phí).
-- Ghế chọn theo **xếp hạng suốt testnet**: uptime, số block làm ra, độ chính xác, độ trễ, phân bố địa lý. Chưa công bố trọng số.
-- Ghế bị khoá 24 tháng; ngừng chạy là mất ghế. Mỗi tháng thay ~50 validator kém nhất.
-- Validator **không được giới thiệu qua ref** (không tính cho creator).
+- Not proportional but by **seat**: up to **1,000 seats**, each worth **1.2M $FLOP** (equal to the required stake, granted free).
+- Seats go by **ranking across all of testnet**: uptime, blocks produced, accuracy, latency, geographic spread. Weights are unpublished.
+- Seats are locked 24 months; stop running and you lose the seat. About 50 of the worst validators are replaced each month.
+- Validators **cannot be referred** (no credit for creators).
 
-## Ai hợp
+## Who it suits
 
-Người đã chạy node chain khác, có server riêng hoặc thuê được, chịu được chi phí cố định hằng tháng. **Không cần GPU.**
+People who have run nodes on other chains, own or can rent a server, and can absorb a fixed monthly cost. **No GPU needed.**
 
-## Cần gì
+## What you need
 
-| Thứ | Yêu cầu (trang testnet, tạm thời) |
+| Item | Requirement (testnet page, provisional) |
 |---|---|
-| CPU | 8+ nhân (FAQ: 3,4 GHz trở lên) |
-| RAM | 64 GB (FAQ ghi 32 GB ECC là tối thiểu) |
-| Ổ | 4 TB NVMe (tối thiểu 2 TB) — để lưu dữ liệu model của mạng |
-| Mạng | 1 Gbps ổn định |
-| Máy | Linux amd64 riêng, mỗi validator 1 máy/VM |
-| Chi phí | Khoảng $300/tháng thuê, hoặc $4.000–5.000 mua máy |
+| CPU | 8+ cores (FAQ: 3.4 GHz or higher) |
+| RAM | 64 GB (FAQ lists 32 GB ECC as the minimum) |
+| Disk | 4 TB NVMe (minimum 2 TB), for the network's model data |
+| Network | Stable 1 Gbps |
+| Machine | Dedicated Linux amd64, one machine/VM per validator |
+| Cost | About $300/month rented, or $4,000–5,000 to buy |
 
-## Tình trạng 07/11/2026
+## Status 2026-11-07
 
-- **Devnet: chưa tự làm được.** Phải được đội Flop hướng dẫn trực tiếp, cấp quyền vào mạng riêng và cấp FLOP.
-  Không có liên hệ thì xin giới thiệu ở [issue #10](https://github.com/flop-labs/network/issues/10). Docs ghi rõ: gửi issue
-  **không đảm bảo** được nhận, không hẹn thời gian.
-- Faucet đang báo suất tài trợ stake validator `open`, nhưng các bước còn lại vẫn cần đội Flop duyệt.
-- **Testnet:** Flop nói sẽ mở cho tất cả, không cần whitelist, stake do mạng tài trợ. Bản tự đăng ký công khai **chưa xong**.
+- **Devnet: not self-serve yet.** The Flop team must onboard you directly, grant access to the private network, and provide FLOP.
+  No contact? Ask for an introduction in [issue #10](https://github.com/flop-labs/network/issues/10). The docs state that an issue
+  **does not guarantee** acceptance and gives no timeline.
+- The faucet shows validator sponsored stake as `open`, but the remaining steps still need Flop team approval.
+- **Testnet:** Flop says it will be open to all, no whitelist, stake sponsored by the network. Public self-registration is **not finished**.
 
-## Nên làm gì bây giờ
+## What to do now
 
-1. Chuẩn bị (hoặc chọn sẵn chỗ thuê) server đúng cấu hình trên.
-2. Theo dõi [docs run-validator](https://docs.flop.network/docs/run-validator) và [@flop_labs](https://x.com/flop_labs) để biết ngày mở đăng ký công khai.
-3. Có kinh nghiệm vận hành node: xin giới thiệu ở issue #10, ghi rõ máy và kinh nghiệm của bạn.
-4. Tách hẳn ví validator khỏi ví miner: docs cảnh báo validator đồng thời làm miner có thể gây lỗi đồng thuận.
+1. Prepare (or pick a rental for) a server with the specs above.
+2. Watch the [run-validator docs](https://docs.flop.network/docs/run-validator) and [@flop_labs](https://x.com/flop_labs) for the public registration date.
+3. Experienced node operators: ask for an introduction in issue #10, stating your machine and experience.
+4. Keep the validator wallet fully separate from the miner wallet: the docs warn that a validator also acting as a miner can cause consensus faults.

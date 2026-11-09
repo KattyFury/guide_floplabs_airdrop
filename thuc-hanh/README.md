@@ -1,33 +1,33 @@
-# Thực hành — quá trình tham gia của chính người viết
+# Practice: the author's own run
 
-Phần [guide](../guide/README.md) được viết **từ những gì đã làm thật ở đây**. Mỗi luật trong guide nên truy được về một dòng
-trong nhật ký: đã thử, đo được gì, sai ở đâu.
+The [guide](../guide/README.md) is written **from what was really done here**. Every rule in the guide should trace back to a line
+in the log: what was tried, what was measured, what went wrong.
 
-| File | Nội dung |
+| File | Content |
 |---|---|
-| [nhat-ky.md](nhat-ky.md) | Nhật ký theo ngày: làm gì, kết quả, sai lầm |
-| [2026-08-technocore-log.md](2026-08-technocore-log.md) | Log cũ TechnoCore (tháng 8–9, tiếng Anh) |
-| [2026-08-tweet-draft.md](2026-08-tweet-draft.md) | Nháp tweet cũ |
+| [nhat-ky.md](nhat-ky.md) | Daily log: actions, results, mistakes |
+| [2026-08-technocore-log.md](2026-08-technocore-log.md) | Old TechnoCore log (Aug–Sep) |
+| [2026-08-tweet-draft.md](2026-08-tweet-draft.md) | Old tweet draft |
 
-## Đang ở đâu (07/11/2026)
+## Where things stand (2026-11-07)
 
-| Nhánh | Trạng thái |
+| Track | Status |
 |---|---|
-| 🤖 Agent | Agent Kibble chạy 24/7 trên VPS. Ví devnet có 25 FLOP. ✅ **Đã mua compute bằng FLOP** (07/11 13:21 UTC, qua CLI Docker), chờ phiên settle |
-| ⛏️ Miner | Ví miner + bộ cài đã sẵn. Máy nhà (RTX 3070 8 GB) **dưới chuẩn 16 GB**. Suất sponsor đang đầy |
-| 🛡️ Validator | Chưa làm: không đủ phần cứng, devnet cần đội Flop duyệt |
-| 📣 Creator | Đang viết guide này. Link ref chưa mở |
+| 🤖 Agent | Agent Kibble runs 24/7 on a VPS. Devnet wallet holds 25 FLOP. ✅ **Compute bought with FLOP** (11/07 13:21 UTC, via Docker CLI), waiting for the session to settle |
+| ⛏️ Miner | Miner wallet + pack ready. Home PC (RTX 3070 8 GB) is **below the 16 GB bar**. Sponsor slots full |
+| 🛡️ Validator | Not done: not enough hardware, devnet needs Flop team approval |
+| 📣 Creator | Writing this guide. Ref links not open |
 
-## Bài học rút ra (dùng để viết guide)
+## Lessons (used to write the guide)
 
-1. **Đo, đừng tin trang trạng thái.** Faucet báo `/health: ok` mà vẫn từ chối phát tiền. Gọi thử thật mới biết.
-2. **Đọc yêu cầu của bộ cài chính thức trước khi kết luận.** Model nhỏ ≠ GPU nhỏ: bộ cài miner đòi ≥16 GB VRAM.
-3. **Ví tạo ra là cất ngay** ở một chỗ bí mật cố định, có backup. Mất 1 ví devnet vì để trong thư mục ẩn của máy khác.
-4. **Mỗi nhánh một ví riêng** (agent, miner, validator). Docs yêu cầu tách ví miner và validator.
-5. **Công cụ của Flop thay đổi theo ngày.** CLI npm có thể lệch với mạng sau mỗi lần nâng cấp: xem
-   [issue](https://github.com/flop-labs/network/issues) trước khi tưởng mình làm sai.
-6. **AI agent làm việc thật phải có trích dẫn.** Không có nguồn thì model bịa số, và người chấm phát hiện được.
-7. **Agent chạy 24/7 cần não dự phòng** và trần token/ngày, không thì hoặc đứng, hoặc tốn tiền âm thầm.
-8. **Đừng gọi AI khi không có việc.** Kiểm tra bằng code trước (0 token), có việc mới gọi não.
-9. **Làm ít mà thật.** Luật airdrop loại tài khoản "làm cho có", nên agent không spam việc, không tạo nhiều DID.
-10. **Lỗi "đầy" không phải mãi mãi, và timeout không phải lỗi.** Gateway sáng 429, chiều chạy được nhưng chậm >60 s. Thử lại thưa, timeout dài.
+1. **Measure, don't trust status pages.** The faucet reported `/health: ok` while refusing to pay out. Only a real call tells you.
+2. **Read the official pack's requirements before concluding.** Small model ≠ small GPU: the miner pack requires ≥16 GB VRAM.
+3. **Store a new wallet immediately** in one fixed secret place, with a backup. One devnet wallet was lost in another machine's hidden folder.
+4. **One wallet per track** (agent, miner, validator). The docs require separating miner and validator wallets.
+5. **Flop's tools change daily.** The npm CLI can drift from the network after each upgrade: check
+   [issues](https://github.com/flop-labs/network/issues) before assuming you did something wrong.
+6. **An AI agent doing real work must cite sources.** Without sources the model invents numbers, and graders catch it.
+7. **A 24/7 agent needs a backup brain** and a daily token cap, or it either stalls or quietly burns money.
+8. **Don't call the AI when there's no work.** Check with code first (0 tokens); call the brain only when there's a job.
+9. **Do less, but real.** Airdrop rules exclude "going through the motions" accounts, so the agent does not spam jobs or create multiple DIDs.
+10. **"Full" errors aren't forever, and a timeout isn't an error.** The gateway gave 429 in the morning, worked in the afternoon but slowly (>60 s). Retry sparsely with long timeouts.

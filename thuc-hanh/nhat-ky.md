@@ -1,107 +1,107 @@
-# Nhật ký tham gia — làm thật, ghi thật
+# Participation log: done for real, written as it happened
 
-Mỗi mục: làm gì, kết quả đo được, sai ở đâu. Giờ là UTC. Ví đều là **devnet** (không có giá trị).
-Code và cấu hình của chính mình nằm ở repo private riêng; ở đây chỉ ghi quá trình.
+Each entry: what was done, measured results, what went wrong. Times are UTC. All wallets are **devnet** (no value).
+The author's own code and config live in a separate private repo; this records only the process.
 
 ---
 
-## 2026-08 → 09 · TechnoCore: tạo DID, nhận room
+## 2026-08 → 09 · TechnoCore: create DID, claim room
 
-Thử các thao tác cơ bản trên technocore.chat bằng terminal: tạo DID, ghi ghi chú, nhận room.
-Log chi tiết (tiếng Anh): [2026-08-technocore-log.md](2026-08-technocore-log.md).
+Tried the basics on technocore.chat from a terminal: create a DID, write a note, claim a room.
+Detailed log: [2026-08-technocore-log.md](2026-08-technocore-log.md).
 
-## 2026-10-18 · Agent Kibble chạy 24/7 trên VPS
+## 2026-10-18 · Agent Kibble running 24/7 on VPS
 
-- Agent tự nhận việc, làm, nộp bài và chấm bài trên Kibble. Não: OpenAI `gpt-5.4-mini`, dùng token miễn phí (bật chia sẻ dữ liệu).
-- Ngày đầu: điểm 17, hạng 703. **3 bài bị chấm `not`** (−9 điểm).
-- ❌ **Sai lầm: agent bịa số.** Nestlé, TSMC lấy số năm cũ; lạm phát Canada trích bản tin chưa phát hành.
-  Gốc rễ: công cụ tìm kiếm (Brave, DuckDuckGo) chặn IP của VPS → không có kết quả → model điền số từ trí nhớ.
-- ✅ Sửa: thêm Wikipedia làm nguồn dự phòng, đọc được PDF, **bắt buộc nộp kèm trích dẫn** (URL + câu trích có thật trên trang đã đọc,
-  mọi con số phải nằm trong câu trích). Sau sửa: 10 bài, 9 useful, 1 not.
+- The agent claims, does and submits jobs and grades others on Kibble. Brain: OpenAI `gpt-5.4-mini`, on free tokens (data sharing on).
+- Day one: score 17, rank 703. **3 submissions graded `not`** (−9 points).
+- ❌ **Mistake: the agent invented numbers.** Nestlé and TSMC figures came from old years; Canada inflation cited a bulletin not yet released.
+  Root cause: search engines (Brave, DuckDuckGo) blocked the VPS IP → no results → the model filled in numbers from memory.
+- ✅ Fix: added Wikipedia as a fallback, PDF reading, and **mandatory citations** (URL + a sentence really on the page read,
+  every number must be inside the quote). After the fix: 10 submissions, 9 useful, 1 not.
 
-## 2026-10-19 · Đăng việc từ Telegram, trần token
+## 2026-10-19 · Posting jobs from Telegram, token cap
 
-- Nhắn câu hỏi cho bot → bot soạn thành việc → bấm ✅ mới đăng. Việc đầu tiên `k9bb97ca69b`, Kibble ghi +2 điểm.
-- ❌ Deploy 2 lần liền không xem log → có thể cắt ngang 1 việc đang làm. Bài học: xem log, đợi việc hiện tại xong rồi mới deploy.
-- ❌ Ghi trong guide "nạp $6 vì dưới $5 là rớt hạng" — lý do **sai** (hạng OpenAI tính theo tổng tiền đã nạp). Vẫn giữ $6, sửa lý do (07/11): $6 để có khoản dư, lỡ dùng lố phần miễn phí bị trừ vài cent thì số dư vẫn trên $5.
+- Message a question to the bot → it drafts a job → tap ✅ to post. First job `k9bb97ca69b`, Kibble gave +2 points.
+- ❌ Deployed twice in a row without checking logs → may have cut off a running job. Lesson: read logs and wait for the current job before deploying.
+- ❌ The guide said "top up $6 because below $5 loses your tier". That reason was **wrong** (OpenAI tiers follow total amount paid). Kept $6 and fixed the reason (11/07): $6 gives a buffer, so a few cents charged past the free tier leaves the balance above $5.
 
-## 2026-10-25 · Điểm tụt về 0
+## 2026-10-25 · Score dropped to 0
 
-- Điểm về 0, hạng 4.491. Kiểm tra: **lỗi phía Kibble**, bộ tính điểm đứng ở seq 9.997.001 trong khi room đã 21 triệu.
-- Vấn đề phụ của mình: chợ cạn việc (3–4 việc mở) mà bot vẫn gọi não 15 phút/lần → ~650k token/ngày phí.
-- ✅ Sửa: code tự xem bảng trước (0 token), không có việc mới thì không gọi não. Token/ngày: 823k → 266k.
-- 27/10: điểm 22, hạng 586.
+- Score 0, rank 4,491. Checked: **a Kibble bug**, the scorer was stuck at seq 9,997,001 while the room had reached 21 million.
+- A side issue of ours: the market had run dry (3–4 open jobs) yet the bot called the brain every 15 minutes → ~650k tokens/day wasted.
+- ✅ Fix: code checks the board first (0 tokens), no new job means no brain call. Tokens/day: 823k → 266k.
+- 10/27: score 22, rank 586.
 
-## 2026-10-28 · OpenAI hết tiền → thêm não dự phòng Claude
+## 2026-10-28 · OpenAI out of credit → added Claude as backup brain
 
-- Key OpenAI báo `429 no credits` → agent đứng cả buổi.
-- ✅ Thêm dự phòng Claude Haiku 5.5: OpenAI lỗi thì tự chuyển, báo Telegram. 1 bước ≈ $0,00006.
-- Bài học: agent chạy 24/7 cần **ít nhất 2 nguồn não**.
+- OpenAI key returned `429 no credits` → the agent sat idle all morning.
+- ✅ Added Claude Haiku 5.5 as backup: on OpenAI failure it switches and reports on Telegram. 1 step ≈ $0.00006.
+- Lesson: a 24/7 agent needs **at least 2 brain sources**.
 
-## 2026-11-03 · Devnet FLOP lần 1: không vào được
+## 2026-11-03 · Devnet FLOP attempt 1: couldn't get in
 
-- Mục tiêu: lấy key API FLOP để agent mua compute bằng $FLOP thay cho OpenAI.
-- Faucet trả `503 IP classification unavailable` cả từ máy nhà lẫn VPS. `/health` vẫn báo `ok`.
-- ❌ Bài học: **`/health` báo ok không có nghĩa là phát được tiền.** Phải thử thật.
-- CLI tự tạo ví `5EUKan…`, lưu mnemonic không mã hoá trong `~/.flop/` của máy đó.
+- Goal: get a FLOP API key so the agent buys compute with $FLOP instead of OpenAI.
+- Faucet returned `503 IP classification unavailable` from both home and VPS, while `/health` still said `ok`.
+- ❌ Lesson: **`/health` ok doesn't mean it can pay out.** Test for real.
+- The CLI created wallet `5EUKan…` and stored its mnemonic unencrypted in that machine's `~/.flop/`.
 
-## 2026-11-07 · Devnet lần 2: có FLOP, chưa mua được compute
+## 2026-11-07 · Devnet attempt 2: got FLOP, couldn't buy compute yet
 
-**09:35 — kiểm tra lại**
-- Faucet đã sửa (bản 0.1.284), `status: open`.
-- `@flop-labs/cli` 0.4.0 trên npm **hỏng** sau nâng cấp runtime devnet (issue #132). Chưa có bản mới.
-- `api.flop.network/v1/models` → danh sách rỗng. Gateway báo đầy.
-- ❌ **Mất ví cũ:** máy đang dùng không có `~/.flop/` → không có khoá ví `5EUKan…`.
-  Bài học: tạo ví xong **chép file khoá ra chỗ cất bí mật chung ngay**, không để nằm trong thư mục ẩn của một máy.
+**09:35: re-check**
+- Faucet fixed (build 0.1.284), `status: open`.
+- `@flop-labs/cli` 0.4.0 on npm **broke** after the devnet runtime upgrade (issue #132). No new release yet.
+- `api.flop.network/v1/models` → empty list. Gateway reports full.
+- ❌ **Old wallet lost:** the current machine has no `~/.flop/` → no key for `5EUKan…`.
+  Lesson: after creating a wallet **copy its key file to shared secret storage immediately**. Don't leave it in one machine's hidden folder.
 
-**09:48 — ví agent mới + faucet**
-- Tạo ví sr25519 bằng thư viện Polkadot (CLI hỏng). Mnemonic cất ở thư mục bí mật riêng, không đưa lên git.
-- `POST https://faucet.flop.network/fund` với `{"address": "<ví>"}` → `200`, **25 FLOP**, tier `anonymous`. Explorer xác nhận số dư.
-- Faucet hiện có 2 mức: ẩn danh 25 FLOP/24h, agent 2 FLOP/24h (phải tiêu mới xin tiếp).
+**09:48: new agent wallet + faucet**
+- Created an sr25519 wallet with a Polkadot library (CLI broken). Mnemonic stored in a private secret folder, never in git.
+- `POST https://faucet.flop.network/fund` with `{"address": "<wallet>"}` → `200`, **25 FLOP**, tier `anonymous`. Explorer confirmed the balance.
+- The faucet has 2 tiers: anonymous 25 FLOP/24h, agent 2 FLOP/24h (must spend before requesting again).
 
-**10:xx — xem máy nhà chạy được node gì** (RTX 3070 8 GB, i7-10700K, RAM 16 GB, Windows 10 + Docker Desktop)
-- Validator: **không**. Cần 32–64 GB RAM, 4 TB NVMe, Linux riêng, và devnet vẫn cần đội Flop duyệt.
-- Miner: lúc đầu kết luận "3070 chạy dư" vì model devnet chỉ cần ~1 GB VRAM.
-  ❌ **Sai.** Đọc README bộ cài miner thì yêu cầu **GPU ≥ 16 GB VRAM**, Ubuntu. Đã đính chính.
-  Bài học: **đọc yêu cầu của bộ cài chính thức trước khi kết luận**, đừng suy từ kích thước model.
-- Suất tài trợ stake miner: `automatic_full` (40/40 chờ calibration). Validator: `open`.
+**10:xx: what node can the home PC run** (RTX 3070 8 GB, i7-10700K, 16 GB RAM, Windows 10 + Docker Desktop)
+- Validator: **no**. Needs 32–64 GB RAM, 4 TB NVMe, dedicated Linux, and devnet still needs Flop approval.
+- Miner: first concluded "the 3070 is more than enough" because the devnet model needs only ~1 GB VRAM.
+  ❌ **Wrong.** The miner pack README requires a **GPU with ≥ 16 GB VRAM** and Ubuntu. Corrected.
+  Lesson: **read the official pack's requirements before concluding**, don't infer from model size.
+- Miner sponsored-stake slots: `automatic_full` (40/40 waiting for calibration). Validator: `open`.
 
-**10:xx — chuẩn bị miner**
-- Tạo ví miner riêng `5DnZWT…` (tách khỏi ví agent).
-- Tải bộ cài `flop-miner-pack-devnet-ts-20261106`, SHA-256 khớp với docs.
-- Docker Desktop có runtime `nvidia` → GPU dùng được trong container. Nhưng card 8 GB dưới chuẩn → chưa chạy.
-- Quyết định chờ: thuê VM GPU ≥16 GB, hoặc đợi Flop nới yêu cầu, và đợi suất sponsor mở.
+**10:xx: preparing the miner**
+- Created a dedicated miner wallet `5DnZWT…` (separate from the agent wallet).
+- Downloaded pack `flop-miner-pack-devnet-ts-20261106`, SHA-256 matches the docs.
+- Docker Desktop has the `nvidia` runtime → GPU usable in containers. But the 8 GB card is below the bar → not run.
+- Decided to wait: rent a ≥16 GB GPU VM, or wait for Flop to relax the requirement, and wait for sponsor slots.
 
-**Công cụ:** lệnh `npx @flop-labs/cli` bị Claude Code chặn (chạy code tải từ ngoài) → phải để người dùng tự chạy hoặc cấp quyền.
-Với người làm theo guide bằng AI agent: chuẩn bị tinh thần bấm duyệt các lệnh này.
+**Tooling:** `npx @flop-labs/cli` was blocked by Claude Code (runs externally downloaded code) → the user must run it or grant permission.
+For anyone following this guide with an AI agent: expect to approve these commands.
 
-**11:06 — lấy được key agent bằng CLI bản Docker** (CLI npm 0.4.0 hỏng)
-- Image `ghcr.io/flop-labs/flop-core/cli:v0.1.290@sha256:24e32b03…` (thấy trong issue #132, chưa có trong `releases.json`).
-- ❌ Gắn thư mục Windows vào container (`-v D:/…:/root/.flop`) → CLI từ chối: *credential directory must be owned by this user with mode 0700*.
-  ✅ Dùng **Docker volume** (`-v flop-cli-home:/root/.flop`) rồi chép file ra chỗ cất bí mật.
-- Image không có lệnh `flop` trong PATH; entrypoint là `node dist/cli.js`.
-- `agent credential --json` → key gateway, model `qwen/qwen2.5-0.5b-instruct`, hạn mức 20.000, **hết hạn sau ~24 giờ**.
-- ❌ CLI **tự tạo thêm ví mới** `5Gx3xz…` và xin faucet 25 FLOP, chứ không dùng ví mình đã tạo. File ví của CLI
-  (`devnet-enroll-wallet.json`) chỉ gồm `type, address, mnemonic` → lần sau đặt sẵn ví của mình vào đó trước khi chạy.
+**11:06: got an agent key with the Docker CLI** (npm CLI 0.4.0 broken)
+- Image `ghcr.io/flop-labs/flop-core/cli:v0.1.290@sha256:24e32b03…` (found in issue #132, not yet in `releases.json`).
+- ❌ Mounting a Windows folder into the container (`-v D:/…:/root/.flop`) → CLI refuses: *credential directory must be owned by this user with mode 0700*.
+  ✅ Used a **Docker volume** (`-v flop-cli-home:/root/.flop`), then copied the files to secret storage.
+- The image has no `flop` on PATH; the entrypoint is `node dist/cli.js`.
+- `agent credential --json` → gateway key, model `qwen/qwen2.5-0.5b-instruct`, quota 20,000, **expires in ~24 hours**.
+- ❌ The CLI **created yet another wallet** `5Gx3xz…` and requested 25 FLOP, rather than using mine. The CLI's wallet file
+  (`devnet-enroll-wallet.json`) holds only `type, address, mnemonic` → next time, put your wallet there before running.
 
-**11:07–11:18 — gọi thử mua compute: 6/6 lần `429 gateway channel pool is full`**
-- Key hợp lệ (gateway nhận key, trả lỗi quá tải chứ không phải lỗi xác thực). Thử 6 lần, cách nhau 2 phút, không gửi dồn dập.
-- Kết luận: phía mình đã làm xong mọi bước. **Nút thắt là gateway của Flop đang đầy** (issue #31, #124).
+**11:07–11:18: test purchase: 6/6 `429 gateway channel pool is full`**
+- Key valid (the gateway accepted it and returned overload, not an auth error). 6 tries, 2 minutes apart, no bursts.
+- Conclusion: everything on our side was done. **The bottleneck is Flop's full gateway** (issues #31, #124).
 
-**13:19–13:23 — ✅ mua compute thành công**
-- Bật vòng thử lại 30 phút/lần. Lần đầu `000`: curl timeout 60 s — gateway không còn trả 429 ngay mà **giữ request lâu**.
-- Gọi lại với timeout 200 s → `200`. Lần 1: 11 token, **0,066 FLOP**. Lần 2: 42 token, **0,24 FLOP**.
-- Receipt trả kèm: kênh thanh toán, miner phục vụ `5Dkyf…NzqU`, giá `0,003 FLOP/GN` (2 GN mỗi token), `settlementStatus: pending`.
-- Số dư ví chưa trừ ngay (vẫn 25 FLOP): tiền trừ khi kênh đóng và tất toán. Theo dõi tiếp.
-- Model `qwen2.5-0.5b` rất nhỏ: hỏi "2+2" thì trả lời vòng vo. Chỉ dùng để chứng minh luồng mua compute, chưa làm não agent được.
-- ❌ Bài học: timeout 60 s ngắn quá → tưởng gateway chết. **Gateway đông thì chậm, đặt timeout ≥ 120 s.**
+**13:19–13:23: ✅ compute purchase succeeded**
+- Turned on a retry loop every 30 minutes. The first returned `000`: curl timed out at 60 s. The gateway no longer returned 429 immediately but **held the request**.
+- Retried with a 200 s timeout → `200`. Call 1: 11 tokens, **0.066 FLOP**. Call 2: 42 tokens, **0.24 FLOP**.
+- The receipt included: payment channel, serving miner `5Dkyf…NzqU`, price `0.003 FLOP/GN` (2 GN per token), `settlementStatus: pending`.
+- The wallet balance didn't change right away (still 25 FLOP): funds are deducted when the channel closes and settles. To be tracked.
+- Model `qwen2.5-0.5b` is very small: asked "2+2" it rambled. Good only for proving the purchase flow, not as an agent brain.
+- ❌ Lesson: a 60 s timeout was too short and made the gateway look dead. **A busy gateway is slow, so use a timeout ≥ 120 s.**
 
-**14:00 — agent thứ 2: Flop Radar chạy 24/7 trên VPS, tự mua compute bằng FLOP**
-- Không sửa agent Kibble; làm agent riêng. Duyệt thiết kế trước (model, cách gọi tool, danh sách tool, giới hạn) rồi mới code.
-- Việc của agent: mỗi 30 phút xem issue mới của Flop, `releases.json`, faucet `/limits` (mạng chuyển testnet chưa, suất sponsor miner mở chưa),
-  model trên gateway → báo Telegram. Issue mới thì **tóm tắt bằng model trên Flop** = mua compute cho một việc có ích, không phải gọi cho có.
-- Model 0.5B quá nhỏ để tự gọi tool → **code điều khiển hết, model chỉ tóm tắt**.
-- Mẹo: chạy agent **ngay trong image CLI chính thức của Flop** (có sẵn Node 24) → agent tự gia hạn key 24 giờ bằng CLI, không cần cài gì thêm.
-- Lần tóm tắt thật đầu tiên: 541 token, **3,5 FLOP**. Đắt hơn dự tính: model viết hết `max_tokens` dù bảo "2 câu".
-  ❌ Bài học: **đo chi phí bằng lần gọi thật** rồi mới đặt trần; 25 FLOP faucet chỉ đủ ~7 lần tóm tắt dài.
-- ❌ Suýt đẩy khoá ví lên VPS cũ: SSH báo **host key đã đổi** → dừng lại, dùng VPS khác. Bài học: thấy cảnh báo host key thì không bỏ qua, nhất là khi sắp chép khoá.
+**14:00: second agent: Flop Radar runs 24/7 on VPS, buying compute with FLOP**
+- Left the Kibble agent untouched; built a separate agent. Approved the design first (model, tool calling, tool list, limits), then coded.
+- Its job: every 30 minutes check new Flop issues, `releases.json`, faucet `/limits` (has the network moved to testnet, are miner sponsor slots open),
+  and gateway models → report to Telegram. New issues are **summarized by a model on Flop**, so it buys compute for useful work, not just to call.
+- The 0.5B model is too small to call tools → **code controls everything, the model only summarizes**.
+- Tip: run the agent **inside Flop's official CLI image** (Node 24 included) → it renews its 24-hour key via the CLI with nothing else to install.
+- First real summary: 541 tokens, **3.5 FLOP**. More than expected: the model writes up to `max_tokens` even when told "2 sentences".
+  ❌ Lesson: **measure cost with a real call** before setting a cap; the 25 FLOP faucet covers only ~7 long summaries.
+- ❌ Nearly pushed wallet keys to the old VPS: SSH reported the **host key had changed** → stopped and used another VPS. Lesson: never ignore a host key warning, especially when about to copy keys.

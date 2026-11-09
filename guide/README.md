@@ -1,45 +1,45 @@
-# Chọn nhánh tham gia airdrop Flop Labs
+# Pick your Flop Labs airdrop track
 
-*Cập nhật 07/11/2026. Hướng dẫn cộng đồng, không phải Flop Labs. Số liệu và luật lấy từ
-[flop.finance](https://flop.finance/official/) và [docs.flop.network](https://docs.flop.network), còn là **bản nháp**, có thể đổi.*
+*Updated 2026-11-07. Community guide, not from Flop Labs. Numbers and rules come from
+[flop.finance](https://flop.finance/official/) and [docs.flop.network](https://docs.flop.network), are still a **draft**, and may change.*
 
-## Airdrop chia thế nào
+## How the airdrop is split
 
-Không bán token, không chia cho quỹ đầu tư. Toàn bộ 4,4 tỷ $FLOP lúc mainnet ra mắt là airdrop cho người **làm việc thật trên testnet**:
+No token sale and no investor allocation. All 4.4 billion $FLOP at mainnet launch is airdropped to people who **do real work on testnet**:
 
-| Nhóm | Số $FLOP | Tính theo |
+| Group | $FLOP | Based on |
 |---|---|---|
-| Miner | 1,2 tỷ | Compute đã phục vụ và được xác minh |
-| Agent | 1,2 tỷ | Compute đã **mua và thanh toán xong** |
-| Validator | 1,2 tỷ | Ghế: tối đa 1.000 ghế, mỗi ghế 1,2 triệu $FLOP |
-| Quỹ hệ sinh thái | 0,8 tỷ | Creator + giới thiệu (ref), builder, thưởng bảo mật |
+| Miner | 1.2B | Compute served and verified |
+| Agent | 1.2B | Compute **bought and settled** |
+| Validator | 1.2B | Seats: up to 1,000 seats, 1.2M $FLOP each |
+| Ecosystem fund | 0.8B | Creators + referrals, builders, security bounties |
 
-**Lịch (dự kiến):** testnet mở Q4/2026, chạy khoảng 90 ngày → chụp số liệu → mainnet Q1/2027.
-Hiện mới có **devnet**: ai cũng vào được, nhưng **không có thưởng, không tính airdrop**. Dùng để tập trước.
+**Schedule (expected):** testnet opens Q4 2026, runs about 90 days → snapshot → mainnet Q1 2027.
+Only **devnet** exists now: open to everyone, but **no rewards and no airdrop credit**. Use it to practice.
 
-## Bạn hợp nhánh nào
+## Which track fits you
 
-| Nhánh | Hợp với ai | Cần gì | Tốn gì | Hướng dẫn |
+| Track | Good for | Needs | Costs | Guide |
 |---|---|---|---|---|
-| 🤖 **Agent** | Ai cũng làm được. Người không có máy mạnh, không biết code (nhờ AI cài) | Ví + DID, máy tính thường | Gần như 0đ | [agent.md](agent.md) |
-| ⛏️ **Miner** | Có GPU NVIDIA **≥ 16 GB VRAM**, hoặc sẵn sàng thuê GPU | GPU + Linux + Docker + máy bật 24/7 | Điện hoặc tiền thuê GPU | [miner.md](miner.md) |
-| 🛡️ **Validator** | Có server mạnh hoặc thuê được, quen vận hành node | 8+ nhân, 64 GB RAM, 4 TB NVMe, mạng 1 Gbps | ~$300/tháng thuê server | [validator.md](validator.md) |
-| 📣 **Creator** | Có cộng đồng / kênh (X, YouTube, TikTok…) | Email + ví $FLOP + tài khoản mạng xã hội | Thời gian làm nội dung | [creator.md](creator.md) |
+| 🤖 **Agent** | Anyone. No strong machine, no coding (let AI install it) | Wallet + DID, a normal PC | Almost $0 | [agent.md](agent.md) |
+| ⛏️ **Miner** | NVIDIA GPU with **≥ 16 GB VRAM**, or willing to rent one | GPU + Linux + Docker + machine on 24/7 | Power or GPU rental | [miner.md](miner.md) |
+| 🛡️ **Validator** | Owns or can rent a strong server, used to running nodes | 8+ cores, 64 GB RAM, 4 TB NVMe, 1 Gbps | ~$300/month server rental | [validator.md](validator.md) |
+| 📣 **Creator** | Has a community / channel (X, YouTube, TikTok...) | Email + $FLOP wallet + social account | Time making content | [creator.md](creator.md) |
 
-Không chắc thì chọn **Agent**: rẻ nhất, không cần phần cứng, và là nhánh Flop cần người nhất (mạng thiếu người mua compute).
-Làm được nhiều nhánh cùng lúc, nhưng **mỗi nhánh một ví riêng**.
+Unsure? Pick **Agent**: cheapest, no hardware, and the track Flop needs most (the network lacks compute buyers).
+You can do several tracks at once, but use **one wallet per track**.
 
-## 3 luật chung, sai là mất trắng
+## 3 shared rules: break them and lose everything
 
-1. **Phải làm việc thật.** Nhận faucet hay giữ token không được gì. Tài khoản bị đánh dấu *manufactured activity* (làm cho có) **mất toàn bộ**.
-2. **Chia nhiều ví không lợi gì.** Phần thưởng tính theo khối lượng việc, không tính theo số ví. Spam ví chỉ tăng rủi ro bị đánh dấu.
-3. **Không ai bán "vào sớm".** Chưa có $FLOP thật để mua bán. Chỉ tin link trong [flop.finance/official](https://flop.finance/official/).
-   Không gửi seed, file khoá, mnemonic cho ai, kể cả người xưng là "support Flop".
+1. **Do real work.** Claiming faucet tokens or holding gets nothing. Accounts flagged for *manufactured activity* **lose everything**.
+2. **Multiple wallets give no advantage.** Rewards follow work volume, not wallet count. Wallet spam only raises the risk of being flagged.
+3. **Nobody sells "early access".** There is no real $FLOP to trade. Trust only links on [flop.finance/official](https://flop.finance/official/).
+   Never send a seed, key file or mnemonic to anyone, including people claiming to be "Flop support".
 
-## Link chính thức
+## Official links
 
-[Docs](https://docs.flop.network) · [Hỏi đáp AI](https://ask.flop.finance) · [Faucet](https://faucet.flop.network) ·
+[Docs](https://docs.flop.network) · [AI Q&A](https://ask.flop.finance) · [Faucet](https://faucet.flop.network) ·
 [Explorer](https://explorer.devnet.flop.network) · [Testnet](https://flop.finance/testnet/) · [Airdrop](https://flop.finance/airdrop/) ·
-[Issue / báo lỗi](https://github.com/flop-labs/network/issues) · [@flop_labs](https://x.com/flop_labs)
+[Issues / bug reports](https://github.com/flop-labs/network/issues) · [@flop_labs](https://x.com/flop_labs)
 
-Muốn xem người viết guide đã làm thật thế nào, gặp lỗi gì: [thuc-hanh/](../thuc-hanh/README.md).
+To see what the author actually did and which errors came up: [thuc-hanh/](../thuc-hanh/README.md).

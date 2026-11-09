@@ -1,62 +1,62 @@
-# 🤖 Nhánh Agent — mua compute bằng $FLOP
+# 🤖 Agent track: buy compute with $FLOP
 
-*Cập nhật 07/11/2026.*
+*Updated 2026-11-07.*
 
-## Agent được tính airdrop thế nào
+## How agents earn airdrop credit
 
-- Pool **1,2 tỷ $FLOP**, chia theo lượng **compute đã mua trong các phiên đã thanh toán xong** trên testnet.
-- Nhận faucet mà không tiêu → **không được gì**. Tiêu faucet vào inference (gọi AI chạy trên máy miner) → được tính.
-- Lên mainnet, phần được chia bị khoá, mở dần khi bạn tiếp tục tiêu: **tiêu 3 $FLOP vào inference mở khoá 1 $FLOP**.
-  Không tiêu thì khoá mãi.
-- Chia 50 ví không lợi gì: phần mở khoá tính theo lượng tiêu, không theo số ví.
+- Pool of **1.2B $FLOP**, split by **compute bought in settled sessions** on testnet.
+- Claiming faucet tokens without spending earns **nothing**. Spending them on inference (AI calls run on miner machines) counts.
+- At mainnet your share is locked and unlocks as you keep spending: **spending 3 $FLOP on inference unlocks 1 $FLOP**.
+  No spending, locked forever.
+- Splitting into 50 wallets gains nothing: unlocks follow spend, not wallet count.
 
-## Ai hợp
+## Who it suits
 
-Mọi người. Không cần GPU, không cần biết code: có thể nhờ AI (Cursor, Claude Code…) làm theo hướng dẫn.
+Everyone. No GPU or coding needed: an AI assistant (Cursor, Claude Code...) can follow the guide for you.
 
-## Cần gì
+## What you need
 
-| Thứ | Là gì | Lấy ở đâu |
+| Item | What it is | Where to get it |
 |---|---|---|
-| Ví | Địa chỉ sr25519, bắt đầu bằng `5…` | CLI của Flop tạo, hoặc thư viện Polkadot |
-| DID | "Căn cước" của agent, dùng chung với TechnoCore / Kibble | [agent-kibble.md](agent-kibble.md) bước 4 |
-| $FLOP test | Tiền để mua compute | [faucet.flop.network](https://faucet.flop.network) |
-| API key agent | Key gọi `https://api.flop.network/v1/chat/completions` | Lệnh `flop agent credential` |
+| Wallet | sr25519 address starting with `5…` | Flop CLI creates one, or a Polkadot library |
+| DID | The agent's "ID card", shared with TechnoCore / Kibble | [agent-kibble.md](agent-kibble.md) step 4 |
+| Test $FLOP | Money to buy compute | [faucet.flop.network](https://faucet.flop.network) |
+| Agent API key | Key for `https://api.flop.network/v1/chat/completions` | Command `flop agent credential` |
 
-**Faucet hôm nay (07/11):** xin ẩn danh 25 FLOP / ví / 24 giờ; agent grant 2 FLOP / 24 giờ và **phải tiêu rồi mới xin tiếp**.
-Trang web faucet có thêm xác minh người thật (Passport, BrightID…) để nhận nhiều hơn.
+**Faucet today (11/07):** anonymous requests get 25 FLOP / wallet / 24h; an agent grant is 2 FLOP / 24h and **must be spent before requesting again**.
+The faucet site also offers proof-of-personhood (Passport, BrightID...) for larger amounts.
 
-## Các bước trên devnet (tập trước, chưa có thưởng)
+## Devnet steps (practice, no rewards yet)
 
-1. **Tạo 1 ví và giữ nó suốt.** Lệnh chính thức (CLI tự tạo ví, xin faucet, lưu key vào `~/.flop/`):
+1. **Create one wallet and keep it.** Official command (the CLI creates a wallet, requests faucet funds, saves the key in `~/.flop/`):
    ```bash
-   npx --yes --package @flop-labs/cli@<bản mới nhất> flop --network devnet agent credential --json
+   npx --yes --package @flop-labs/cli@<latest version> flop --network devnet agent credential --json
    ```
-   ⚠️ Ví CLI tạo lưu mnemonic **không mã hoá** trong `~/.flop/`. Chép ngay file đó ra USB: đổi máy mà không mang theo là mất ví.
-2. **Xin FLOP.** Lệnh trên tự xin nếu ví dưới 1 FLOP. Hoặc tự xin trên web faucet. Kiểm tra số dư:
-   `https://explorer.devnet.flop.network/api/accounts/<địa chỉ ví>`.
-3. **Gọi thử 1 lần** `POST https://api.flop.network/v1/chat/completions` bằng key vừa lấy. Gọi được = agent đã "mua compute".
-4. **Cho agent của bạn dùng key đó làm "não"** thay cho OpenAI/Claude. Agent mẫu trong repo này: [agent-kibble.md](agent-kibble.md).
+   ⚠️ The CLI stores the mnemonic **unencrypted** in `~/.flop/`. Copy that file to USB immediately: switch machines without it and the wallet is gone.
+2. **Get FLOP.** The command above requests funds if the wallet holds under 1 FLOP. Or use the faucet site. Check the balance:
+   `https://explorer.devnet.flop.network/api/accounts/<wallet address>`.
+3. **Call once** `POST https://api.flop.network/v1/chat/completions` with the new key. Success = the agent has "bought compute".
+4. **Let your agent use that key as its "brain"** instead of OpenAI/Claude. Sample agent in this repo: [agent-kibble.md](agent-kibble.md).
 
-## Tình trạng 07/11/2026: làm được, nhưng đi đường vòng
+## Status 2026-11-07: works, via a detour
 
-- `@flop-labs/cli` bản 0.4.0 trên npm **không chạy** với devnet ([issue #132](https://github.com/flop-labs/network/issues/132)).
-  **Dùng bản Docker thay thế** (cần Docker; trên Windows dùng Git Bash):
+- `@flop-labs/cli` 0.4.0 on npm **does not work** with devnet ([issue #132](https://github.com/flop-labs/network/issues/132)).
+  **Use the Docker build instead** (needs Docker; on Windows use Git Bash):
   ```bash
   IMG=ghcr.io/flop-labs/flop-core/cli@sha256:24e32b034b0d3600ee28127dad30d4228e623235f2dc62da34c2c85ba5e21a88  # v0.1.290
   MSYS_NO_PATHCONV=1 docker run --rm -v flop-cli-home:/root/.flop --entrypoint sh $IMG     -c 'chmod 700 /root/.flop && exec node dist/cli.js --network devnet agent credential --json'
   ```
-  Phải dùng Docker volume (`flop-cli-home`), **không** gắn thư mục Windows: CLI đòi thư mục quyền 0700.
-  Key và ví nằm trong volume; chép ra chỗ cất bí mật:
-  `docker run --rm -v flop-cli-home:/f -v "<thư mục bí mật>":/out alpine cp -r /f/. /out/`
-- Gateway lúc đông trả `429 gateway channel pool is full` ([#124](https://github.com/flop-labs/network/issues/124)):
-  thử lại sau 30–60 phút, đừng gửi dồn. Lúc có chỗ thì phản hồi **chậm** → đặt timeout ≥ 120 giây (60 giây là hụt).
-- Gọi được thì kết quả có `usage.cost_flop` và `x_flop_receipt` (kênh, miner, `settlementStatus`).
-  `pending` nghĩa là chưa tất toán; airdrop chỉ tính **phiên đã settle**.
-- Người viết guide: 6 lần 429 buổi sáng, **13:21 UTC gọi thành công**, 2 lần tốn 0,066 + 0,24 FLOP.
+  Use a Docker volume (`flop-cli-home`), **not** a mounted Windows folder: the CLI requires a 0700 directory.
+  Key and wallet live in the volume; copy them to your secrets location:
+  `docker run --rm -v flop-cli-home:/f -v "<secrets folder>":/out alpine cp -r /f/. /out/`
+- When busy, the gateway returns `429 gateway channel pool is full` ([#124](https://github.com/flop-labs/network/issues/124)):
+  retry after 30–60 minutes, do not burst. When there is room, responses are **slow** → set timeout ≥ 120 s (60 s falls short).
+- A successful call returns `usage.cost_flop` and `x_flop_receipt` (channel, miner, `settlementStatus`).
+  `pending` means not settled yet; the airdrop counts only **settled sessions**.
+- The author: six 429s in the morning, **success at 13:21 UTC**, 2 calls costing 0.066 + 0.24 FLOP.
 
-## Trong lúc chờ: Agent Kibble
+## While you wait: Agent Kibble
 
-[Kibble](https://kibble.world) là chợ việc cho agent do cộng đồng dựng trên TechnoCore (hub agent của Flop).
-Điểm Kibble **không tính airdrop**, nhưng là chỗ tập cho agent làm việc thật và có sẵn DID khi testnet mở.
-Hướng dẫn cài agent mẫu chạy nền trên máy, nhờ Cursor cài hộ: **[agent-kibble.md](agent-kibble.md)**.
+[Kibble](https://kibble.world) is a community-built job market for agents on TechnoCore (Flop's agent hub).
+Kibble points **do not count for the airdrop**, but it is real practice for your agent and you will have a DID ready when testnet opens.
+Install guide for the sample background agent, with Cursor doing the work: **[agent-kibble.md](agent-kibble.md)**.

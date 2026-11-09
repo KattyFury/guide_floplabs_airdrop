@@ -1,49 +1,49 @@
-# AGENTS.md — dành cho AI (Cursor) cài Agent Kibble cho người dùng
+# AGENTS.md: for AI (Cursor) installing Agent Kibble for the user
 
-Người dùng gửi link repo này kèm câu kiểu "đọc repo rồi build cho tôi" / "cài agent cho mình" → làm đúng các bước dưới đây.
+The user sends this repo link with something like "read the repo and build it for me" / "đọc repo rồi build cho tôi" / "install the agent" → follow the steps below exactly.
 
-⚠️ "Build" ở đây = CÀI ĐẶT agent CÓ SẴN trong repo, KHÔNG phải viết agent mới. Không tự viết code, không tạo project mới.
+⚠️ "Build" here means INSTALL the agent ALREADY in this repo. It does NOT mean writing a new agent. Do not write code or create a new project.
 
-## Cách nói chuyện
+## How to talk
 
-- Người dùng KHÔNG biết code. Tiếng Việt, ngắn, như nói với học sinh lớp 6.
-- Mỗi lần chỉ đưa 1–3 việc. Từ kỹ thuật nào cũng giải thích bằng 1 câu đời thường.
+- The user does NOT know how to code. Reply in the user's language (Vietnamese if they write Vietnamese), short, as if to a 6th grader.
+- Give only 1–3 tasks at a time. Explain every technical term in one everyday sentence.
 
-## Luật
+## Rules
 
-- Agent trong `agent/` đã viết xong và chạy thật. Việc của bạn CHỈ là cài đặt và chạy thử.
-  KHÔNG viết lại / refactor / sửa `agent/src/`, KHÔNG cài thư viện, KHÔNG chạy `npm install`.
-- Đừng đọc cả repo. Chỉ cần `agent/README.md`, `agent/.env.example`, `agent/config.json`.
-  Bỏ qua `docs/`, `guide/` (trừ `guide/agent-kibble.md`), `thuc-hanh/`.
-- Key và token: người dùng TỰ dán vào `agent/.env`. Không yêu cầu dán vào chat, không in giá trị ra.
-- KHÔNG mở/đọc file trong `secrets/`. KHÔNG commit, KHÔNG push, KHÔNG sửa `.gitignore`.
-- Mỗi lần chạy `node agent/thu-1-phien.js` là làm 1 việc thật trên Kibble bằng DID của người dùng → chỉ chạy 1 lần.
+- The agent in `agent/` is finished and runs in production. Your ONLY job is to install and test it.
+  Do NOT rewrite / refactor / edit `agent/src/`, install libraries, or run `npm install`.
+- Do not read the whole repo. You only need `agent/README.md`, `agent/.env.example`, `agent/config.json`.
+  Skip `docs/`, `guide/` (except `guide/agent-kibble.md`), `thuc-hanh/`.
+- Keys and tokens: the user pastes them into `agent/.env` THEMSELVES. Never ask for them in chat and never print their values.
+- Do NOT open or read files in `secrets/`. Do NOT commit, push, or edit `.gitignore`.
+- Each `node agent/thu-1-phien.js` does 1 real job on Kibble with the user's DID → run it only once.
 
-## Các bước (làm đúng thứ tự)
+## Steps (in order)
 
-0. Lấy repo về máy (nếu workspace chưa phải repo này):
-   - Kiểm tra Git: `git --version`. Chưa có → hướng dẫn cài Git for Windows ở git-scm.com (bấm Next liên tục là được),
-     cài xong thì mở lại Cursor.
-   - Thư mục đang mở còn trống → `git clone https://github.com/KattyFury/guide_floplabs_airdrop.git .`
-     (có dấu chấm ở cuối = clone thẳng vào đây). Không trống → clone vào thư mục con `guide_floplabs_airdrop`
-     và chạy MỌI lệnh sau trong thư mục đó.
-   - Đọc file `AGENTS.md` này trong repo vừa clone rồi làm tiếp từ bước 1.
-1. Kiểm tra Node.js: `node -v`. Chưa có hoặc dưới bản 20 → hướng dẫn cài bản LTS ở nodejs.org, từng nút bấm.
-2. Hướng dẫn lấy key OpenAI: platform.openai.com → Billing nạp $6 (không phải $5: dư ra để lỡ bị trừ vài cent khi dùng lố phần miễn phí thì số dư vẫn không tụt dưới $5) → Data controls → Sharing bật chia sẻ dữ liệu
-   (được 2,5 triệu token miễn phí/ngày; nói rõ OpenAI được dùng dữ liệu để huấn luyện) → API keys → Create new secret key.
-3. Hướng dẫn tạo bot Telegram: @BotFather → `/newbot` → tên hiển thị → username kết thúc bằng `bot` → copy token.
-4. DID (căn cước agent): nếu `data/` chưa có file `<tên>.json` của người dùng → hỏi 1 tên ngắn không dấu →
-   `node scripts/generate-did.js <tên>`. Đã có thì KHÔNG tạo thêm (mỗi người chỉ 1 DID).
-   Nhắc backup NGAY thư mục `secrets/` + `data/<tên>.json` ra USB. Mất là mất căn cước, không lấy lại được.
-5. Copy `agent/.env.example` thành `agent/.env` (đã có thì giữ nguyên). Điền `DID_LABEL=<tên>`.
-   Bảo người dùng TỰ dán key OpenAI vào `OPENAI_API_KEY=` và token vào `TELEGRAM_BOT_TOKEN=`, rồi lưu file.
-6. Chạy thử đúng 1 lần: `node agent/thu-1-phien.js`
-   - Ra dòng `💸` → OK.
-   - Báo `❌` → giải thích bằng tiếng thường, sửa theo bảng "Khi có lỗi" trong `agent/README.md`.
-7. Bảo người dùng bấm đúp `agent/CAI-TU-CHAY.bat` → agent chạy ngầm mỗi khi mở máy (tắt máy = nghỉ).
-8. Bảo người dùng mở bot trên Telegram → `/start` → `/status`. Người nhắn đầu tiên sẽ thành chủ bot.
-9. Kết thúc bằng checklist:
-   - [ ] `/status` trên Telegram có trả lời
-   - [ ] Biết: máy bật là agent chạy, tắt máy là nghỉ, mỗi ngày nhận 1 báo cáo lúc 7h sáng; nhắn câu hỏi thường cho bot = đăng việc lên Kibble (bấm ✅ Đăng mới đăng)
-   - [ ] Đã backup DID ra USB
-   - [ ] Không đưa `agent/.env` hay `secrets/` cho ai, không commit lên GitHub
+0. Get the repo (if the workspace is not this repo yet):
+   - Check Git: `git --version`. Missing → guide the user to install Git for Windows from git-scm.com (keep clicking Next),
+     then reopen Cursor.
+   - Open folder is empty → `git clone https://github.com/KattyFury/guide_floplabs_airdrop.git .`
+     (the trailing dot clones right here). Not empty → clone into a `guide_floplabs_airdrop` subfolder
+     and run EVERY later command there.
+   - Read this `AGENTS.md` in the fresh clone, then continue from step 1.
+1. Check Node.js: `node -v`. Missing or below 20 → guide the user through installing the LTS from nodejs.org, click by click.
+2. Guide the user to get an OpenAI key: platform.openai.com → Billing, top up $6 (not $5: the extra keeps the balance from dropping below $5 if a few cents get charged past the free tier) → Data controls → Sharing, turn on data sharing
+   (2.5M free tokens/day; state clearly that OpenAI may train on the data) → API keys → Create new secret key.
+3. Guide the user to create a Telegram bot: @BotFather → `/newbot` → display name → username ending in `bot` → copy the token.
+4. DID (the agent's identity): if `data/` has no `<name>.json` for this user → ask for one short name without diacritics →
+   `node scripts/generate-did.js <name>`. If one exists, do NOT create another (one DID per person).
+   Remind the user to back up `secrets/` + `data/<name>.json` to USB NOW. Lost means the identity is gone for good.
+5. Copy `agent/.env.example` to `agent/.env` (keep it if it exists). Set `DID_LABEL=<name>`.
+   Tell the user to paste the OpenAI key into `OPENAI_API_KEY=` and the token into `TELEGRAM_BOT_TOKEN=` THEMSELVES, then save.
+6. Test exactly once: `node agent/thu-1-phien.js`
+   - A `💸` line → OK.
+   - A `❌` → explain in plain words and fix using the "When something fails" table in `agent/README.md`.
+7. Tell the user to double-click `agent/CAI-TU-CHAY.bat` → the agent runs in the background whenever the PC is on (PC off = agent rests).
+8. Tell the user to open the bot on Telegram → `/start` → `/status`. The first person to message becomes the bot owner.
+9. Finish with this checklist:
+   - [ ] `/status` replies on Telegram
+   - [ ] User knows: PC on = agent runs, PC off = rests, 1 report daily at 7 AM; a plain question to the bot posts a job on Kibble (only after tapping ✅ Đăng)
+   - [ ] DID backed up to USB
+   - [ ] `agent/.env` and `secrets/` shared with no one and not committed to GitHub

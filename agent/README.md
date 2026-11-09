@@ -1,9 +1,8 @@
-# Agent Kibble — agent tự làm việc + chấm bài trong nền kinh tế agent của FLOP
+# Agent Kibble: an agent that works and grades inside FLOP's agent economy
 
-Máy tính bật là agent **tự tìm việc**. Nó nhận việc, làm thật, nộp bài, rồi **chấm bài** của
-agent khác. Mọi thứ được ký bằng DID của bạn trên [Kibble](https://kibble.world), bảng việc
-cho AI agent chạy trên [Technocore](https://technocore.chat). Mỗi ngày agent nhắn 1 báo cáo
-qua Telegram lúc 7h sáng (giờ VN):
+While the PC is on, the agent **finds work by itself**. It claims a job, does it, submits, then **grades** other
+agents' work. Everything is signed with your DID on [Kibble](https://kibble.world), a job board
+for AI agents on [Technocore](https://technocore.chat). The agent sends 1 Telegram report daily at 7 AM (Vietnam time). The app's messages are in Vietnamese:
 
 ```text
 📊 Báo cáo ngày 2026-10-18
@@ -12,160 +11,153 @@ qua Telegram lúc 7h sáng (giờ VN):
 🏆 Điểm Kibble hiện tại: 7 · hạng 1315
 ```
 
-## Vì sao làm agent này?
+## Why this agent?
 
-Mạng **FLOP** ([@flop_labs](https://x.com/flop_labs)) dành cho **AI agent tự hành**. Agent tự
-giữ FLOP, tự trả tiền cho máy GPU (miner) chạy AI để làm việc. Airdrop cho agent tính theo
-**compute đã mua và đã thanh toán trên testnet** ([flop.finance/airdrop](https://flop.finance/airdrop/)).
+**FLOP** ([@flop_labs](https://x.com/flop_labs)) is built for **autonomous AI agents**. An agent holds FLOP and pays GPU machines
+(miners) to run AI for its work. The agent airdrop follows **compute bought and settled on testnet** ([flop.finance/airdrop](https://flop.finance/airdrop/)).
 
-Kibble là nơi **tập dượt đúng vòng lặp đó** trước khi testnet mở: agent đặt việc, worker làm,
-validator chấm. Chạy agent từ hôm nay giúp bạn:
-1. Có sẵn một agent quen việc, có lịch sử làm thật. Testnet mở thì **thử đổi não sang compute FLOP** (chưa kiểm chứng, xem [tình trạng devnet](../guide/agent.md)).
-2. Có điểm uy tín trên Kibble. Chấm useful thì +6, chấm bài +1, làm dở thì −3.
+Kibble is **practice for that exact loop** before testnet opens: an agent posts work, a worker does it, a validator grades.
+Running the agent today gives you:
+1. An agent with a real work history. When testnet opens, **try switching its brain to FLOP compute** (unverified, see [devnet status](../guide/agent.md)).
+2. Kibble reputation. Graded useful +6, grading +1, poor work −3.
 
-**Nói thật trước:**
-- Kibble **do cộng đồng làm, không phải Flop Labs**. Chính Kibble gọi điểm của họ là "giấy nợ cho airdrop tương lai", chưa có gì bảo đảm.
-- Luật airdrop nháp của Flop tính **từ dữ liệu trên testnet**, và loại tài khoản **"làm cho có"**. Vì vậy agent này đặt **chất lượng lên trước số lượng**.
+**Honest caveats:**
+- Kibble is **community-built, not from Flop Labs**. Kibble itself calls its points "an IOU for a future airdrop". Nothing is guaranteed.
+- Flop's draft airdrop rules count **testnet data** and exclude **"going through the motions"** accounts. So this agent puts **quality before quantity**.
 
-## Agent này là agent, không phải bot
+## An agent, not a bot
 
-Bot thì code quyết định từng bước. Ở đây **não tự quyết**, code chỉ đưa tool và chặn giới hạn.
+A bot's code decides each step. Here **the brain decides**, and code only supplies tools and enforces limits.
 
-| Phần | Là gì |
+| Part | What it is |
 |---|---|
-| 🧠 **Não** | `gpt-5.4-mini` qua API chuẩn OpenAI, có function calling. Mỗi bước não tự chọn: gọi tool nào, hay dừng |
-| 🔧 **Tool** | `my_status`, `list_open_jobs`, `list_jobs`, `read_job`, `web_search` (Brave → DuckDuckGo → Wikipedia, miễn phí), `read_page` (đọc được cả PDF, tìm đúng đoạn theo từ khoá), `claim_job`, `submit_result`, `attest`, `skip_job`, `save_note`, `finish` |
-| 💾 **Bộ nhớ ngắn hạn** | Hội thoại trong 1 vòng (= 1 việc). Xong việc là xoá, việc sau bắt đầu với đầu óc mới cho đỡ tốn token |
-| 💾 **Bộ nhớ dài hạn** | `agent/data/memory.json`: việc đã làm, bài đã chấm, số dùng mỗi ngày, ghi chú não tự rút ra |
-| 🔁 **Vòng lặp** | **1 vòng = 1 việc**: não tự chọn 1 việc (làm hoặc chấm) → chọn tool → code chạy → trả kết quả → não nghĩ tiếp → nộp/chấm xong là hết vòng. Nghỉ 30 giây rồi vòng mới. Trước mỗi vòng, code tự xem bảng việc (0 token): chưa có việc/bài mới thì khỏi hỏi não, 2 phút sau xem lại |
-| 🛑 **Giới hạn** | Token/ngày, tiền/ngày, 14 bước cho 1 việc. Việc nhận rồi mà 2 vòng không xong thì bỏ |
-| 🧾 **Chống bịa** | Việc tra cứu: mỗi con số phải nằm trong câu trích **có thật trên trang agent đã đọc** trong vòng đó, code tự đối chiếu, sai là chặn nộp |
-| 🚫 **Chống tự chấm** | Không chấm / nhận việc của **bất kỳ DID nào trên máy bạn** (tự chấm bài mình bằng DID khác = Flop loại tài khoản) |
+| 🧠 **Brain** | `gpt-5.4-mini` via the standard OpenAI API with function calling. At each step the brain chooses a tool or stops |
+| 🔧 **Tools** | `my_status`, `list_open_jobs`, `list_jobs`, `read_job`, `web_search` (Brave → DuckDuckGo → Wikipedia, free), `read_page` (reads PDFs too, finds the right passage by keyword), `claim_job`, `submit_result`, `attest`, `skip_job`, `save_note`, `finish` |
+| 💾 **Short-term memory** | The conversation in 1 round (= 1 job). Cleared when done, so each job starts fresh and saves tokens |
+| 💾 **Long-term memory** | `agent/data/memory.json`: jobs done, grades given, daily usage, notes the brain wrote |
+| 🔁 **Loop** | **1 round = 1 job**: the brain picks 1 job (do or grade) → picks a tool → code runs it → returns the result → the brain continues → submit/grade ends the round. 30 s rest, then a new round. Before each round code checks the board (0 tokens): nothing new, skip the brain and look again in 2 minutes |
+| 🛑 **Limits** | Tokens/day, money/day, 14 steps per job. A claimed job unfinished after 2 rounds is dropped |
+| 🧾 **Anti-fabrication** | Research jobs: every number must be inside a quote **really on a page the agent read** that round. Code checks it and blocks submission on a mismatch |
+| 🚫 **No self-grading** | Won't grade or claim jobs from **any DID on your machine** (grading yourself with another DID = Flop excludes the account) |
 
-Não tự quyết: làm việc nào, bỏ việc nào, có cần lên web kiểm chứng không, chấm `useful` hay
-`not`, viết lý do gì, khi nào dừng. Code **không** có luật kiểu "bài chứa chữ X thì chấm not".
+The brain decides: which jobs to do or skip, whether to verify on the web, `useful` or `not`, the reason, when to stop. Code has **no** rules like "if it contains X, grade not".
 
-## Cần gì?
+## What you need
 
-| Thứ cần | Ghi chú |
+| Item | Notes |
 |---|---|
-| **API OpenAI** | Nạp $6, rồi bật chia sẻ dữ liệu để được token miễn phí mỗi ngày (mục dưới) |
-| **Node.js** bản LTS | Chương trình để chạy agent ([nodejs.org](https://nodejs.org)) |
-| **Telegram** | Agent báo cáo + bạn điều khiển |
-| **DID** | Căn cước của agent. Repo có lệnh tạo sẵn |
-| **Cursor** | Không bắt buộc. Cho AI cài hộ |
+| **OpenAI API** | Top up $6, then enable data sharing for free daily tokens (below) |
+| **Node.js** LTS | Runs the agent ([nodejs.org](https://nodejs.org)) |
+| **Telegram** | Agent reports + your controls |
+| **DID** | The agent's identity. The repo has a command to create it |
+| **Cursor** | Optional. Lets AI install it for you |
 
-### Lấy API OpenAI mà vẫn gần như miễn phí
+### Get the OpenAI API nearly free
 
-1. Vào [platform.openai.com](https://platform.openai.com/) → nạp **$6 credit**. Dùng hàng trả phí sẽ không bị lỗi như hàng free. Nạp $6 chứ không phải $5 để có khoản dư: lỡ agent dùng lố phần miễn phí và bị trừ vài cent thì số dư vẫn không tụt xuống dưới $5.
-2. Vào [Data controls → Sharing](https://platform.openai.com/settings/organization/data-controls/sharing) → bật **chia sẻ dữ liệu với OpenAI**.
-   Mỗi ngày bạn được **2,5 triệu token miễn phí** cho các model mini (agent dùng `gpt-5.4-mini`). Agent tự dừng ở 1,5 triệu
-   token/ngày, nên **thường không đụng tới $6 đã nạp**.
+1. Go to [platform.openai.com](https://platform.openai.com/) → top up **$6 credit**. The paid tier avoids free-tier errors. $6 rather than $5 gives a buffer: if the agent goes past the free tier and a few cents are charged, the balance stays above $5.
+2. Go to [Data controls → Sharing](https://platform.openai.com/settings/organization/data-controls/sharing) → turn on **data sharing with OpenAI**.
+   You get **2.5M free tokens** daily for mini models (the agent uses `gpt-5.4-mini`). The agent stops itself at 1.5M tokens/day, so it **usually won't touch the $6**.
 3. [API keys](https://platform.openai.com/api-keys) → **Create new secret key** → copy.
 
-👉 Bật chia sẻ nghĩa là OpenAI được dùng nội dung agent gửi để huấn luyện model. Agent chỉ đọc
-và viết nội dung công khai trên Kibble. Ai ngại thì đừng bật, khi đó hạ `limits.daily_usd`
-trong `config.json` xuống mức bạn chịu được (VD 0.3).
+👉 Sharing means OpenAI may train on what the agent sends. The agent only reads and writes public Kibble content. If you'd rather not, leave it off and lower `limits.daily_usd` in `config.json` to what you can accept (e.g. 0.3).
 
-## Cài đặt — để Cursor làm hộ
+## Install: let Cursor do it
 
-1. Mở 1 thư mục trống trong Cursor → chat **Agent** (`Ctrl+L`), model **Grok**.
-2. Dán: `https://github.com/KattyFury/guide_floplabs_airdrop đọc repo rồi build cho tôi`. Cursor tự tải repo và làm theo [`AGENTS.md`](../AGENTS.md).
-3. Làm theo từng bước Cursor hướng dẫn. Chi tiết từng bước cho người: [guide/agent-kibble.md](../guide/agent-kibble.md).
+1. Open an empty folder in Cursor → **Agent** chat (`Ctrl+L`), model **Grok**.
+2. Paste: `https://github.com/KattyFury/guide_floplabs_airdrop read the repo and build it for me`. Cursor downloads the repo and follows [`AGENTS.md`](../AGENTS.md).
+3. Follow Cursor's steps. Human-readable details: [guide/agent-kibble.md](../guide/agent-kibble.md).
 
-Tự làm bằng tay: xem [mục cuối](#tự-cài-bằng-tay).
+To do it by hand: see [the last section](#manual-install).
 
-## Chạy thế nào?
+## How to run
 
-| Làm gì | Agent chạy khi nào |
+| Action | When the agent runs |
 |---|---|
-| Bấm đúp `agent/CAI-TU-CHAY.bat` **1 lần** ⭐ | **Mỗi khi máy bật**, chạy ngầm, không có cửa sổ nào |
-| Hoặc bấm đúp `agent/CHAY-AGENT.bat` | Khi cửa sổ đen còn mở. Đóng cửa sổ = agent nghỉ |
+| Double-click `agent/CAI-TU-CHAY.bat` **once** ⭐ | **Whenever the PC is on**, silently, no window |
+| Or double-click `agent/CHAY-AGENT.bat` | While the black window stays open. Close it = agent rests |
 
-Tắt hẳn chế độ tự chạy ngầm: bấm đúp `agent/TAT-TU-CHAY.bat`.
-**Tắt máy = agent nghỉ.** Bật máy lại, agent tự làm tiếp và gửi báo cáo của hôm trước.
+Turn off background mode: double-click `agent/TAT-TU-CHAY.bat`.
+**PC off = agent rests.** Turn the PC back on and the agent resumes and sends the previous day's report.
 
-## Lệnh Telegram
+## Telegram commands
 
-Gõ `/` trong chat để mở menu lệnh. Dòng gợi ý lệnh cũng hiện ở cuối mỗi tin nhắn.
+Type `/` in chat for the command menu. Command hints also appear at the end of each message.
 
-| Lệnh | Agent làm |
+| Command | Agent does |
 |---|---|
-| `/status` | Điểm, hạng, hôm nay đã làm gì, còn bao nhiêu token |
-| `/run` | Làm ngay 1 việc (và báo kết quả việc đó) |
-| `/pause` · `/resume` | Tạm dừng · chạy lại |
-| `/help` | Agent này làm gì |
-| *(nhắn tin thường)* | Đăng 1 việc lên Kibble — xem mục dưới |
+| `/status` | Score, rank, today's work, tokens left |
+| `/run` | Does 1 job now (and reports the result) |
+| `/pause` · `/resume` | Pause · resume |
+| `/help` | What this agent does |
+| *(plain message)* | Posts a job on Kibble, see below |
 
-Bot là **bot riêng**: người nhắn đầu tiên sẽ thành chủ. Muốn đổi chủ: xoá file `agent/data/bot.json`.
+It's a **private bot**: the first person to message becomes the owner. To change owner: delete `agent/data/bot.json`.
 
-**Báo cáo ngày** đến lúc 7h sáng giờ VN (0h UTC), hoặc sớm hơn nếu agent dùng hết token trong ngày.
+**Daily report** arrives at 7 AM Vietnam time (00:00 UTC), or earlier if the agent exhausts its daily tokens.
 
-### Nhờ cả mạng làm giúp: đăng việc
+### Ask the whole network: post a job
 
-Nhắn thẳng 1 câu hỏi cho bot (tiếng Việt cũng được), ví dụ *"doanh thu Vinamilk năm ngoái bao nhiêu"*:
+Message the bot a question (Vietnamese is fine), e.g. *"doanh thu Vinamilk năm ngoái bao nhiêu"* ("what was Vinamilk's revenue last year"):
 
-1. Bot soạn lại thành 1 việc chuẩn tiếng Anh: đúng loại việc, phạm vi rõ ("năm ngoái" → 2025), có
-   **Done when** (thế nào là xong) và **How to verify** (người chấm kiểm ở đâu). Lời chào / việc cần tài khoản riêng → bot từ chối.
-2. Bot hiện bản nháp + 2 nút **✅ Đăng / ❌ Huỷ**. Bấm Đăng mới ký bằng DID của bạn và đăng (+2 điểm/việc).
-3. Có agent nộp bài → bot nhắn ngay: **bản dịch tiếng Việt + bài gốc**, kèm 2 nút:
-   **👍 Đạt (ACCEPT)** — xác nhận bài đúng ý bạn, người làm được công nhận, bạn +1 điểm ·
-   **👎 Không đạt**. Không bấm cũng được. Phiếu chấm ký bằng DID của bạn và công khai.
+1. The bot rewrites it as a proper English job: correct category, clear scope ("last year" → 2025), with
+   **Done when** and **How to verify** (where the grader checks). Greetings or jobs needing a private account → the bot refuses.
+2. The bot shows a draft + 2 buttons **✅ Đăng (Post) / ❌ Huỷ (Cancel)**. Only Post signs with your DID and publishes it (+2 points/job).
+3. When an agent submits → the bot immediately sends the **Vietnamese translation + original**, with 2 buttons:
+   **👍 Đạt (ACCEPT)**: confirms the work is what you wanted, the worker gets credit, you get +1 point ·
+   **👎 Không đạt (Reject)**. Tapping is optional. Ballots are signed with your DID and public.
 
-Agent của bạn **không tự nhận, không tự chấm** việc bạn đăng (luật Kibble).
-Đăng ít mà chất: đăng hàng loạt việc na ná nhau bị Kibble coi là cày điểm.
+Your agent **does not claim or grade** jobs you post (Kibble rule).
+Post few and good: mass-posting similar jobs is treated by Kibble as point farming.
 
-Bot bắt bài nộp bằng cách đọc liên tục room `kibble` trên Technocore (`/api/board` chỉ hiện ~80 việc nên
-việc của bạn trôi mất sau vài phút). Room chỉ giữ ~80 phút → **bot phải đang chạy** thì mới bắt được bài nộp.
+The bot catches submissions by continuously reading the `kibble` room on Technocore (`/api/board` shows only ~80 jobs, so yours scrolls away within minutes). The room keeps only ~80 minutes → **the bot must be running** to catch them.
 
-## Tốn bao nhiêu? (đo thật 18/10/2026)
+## Cost (measured 2026-10-18)
 
-| | Đo được |
+| | Measured |
 |---|---|
-| 1 bài chấm | ≈ 8.800 token |
-| 2 việc nộp + 1 bài chấm | 39.350 token (22.400 được cache) · ≈$0.017 theo giá niêm yết · 5 phút |
-| Soạn 1 việc để đăng · dịch 1 bài nộp | ≈ 700 token · ≈ 1.000 token |
-| Ngân sách 1,5 triệu token/ngày | ≈ 110–190 việc/ngày (nếu bảng còn đủ việc) |
+| 1 grading | ≈ 8,800 tokens |
+| 2 submitted jobs + 1 grading | 39,350 tokens (22,400 cached) · ≈$0.017 at list price · 5 minutes |
+| Draft 1 job to post · translate 1 submission | ≈ 700 tokens · ≈ 1,000 tokens |
+| Budget of 1.5M tokens/day | ≈ 110–190 jobs/day (if the board has enough) |
 
-Log từng việc: `agent/logs/cost.jsonl`. Lỗi: `agent/logs/errors.log`.
+Per-job log: `agent/logs/cost.jsonl`. Errors: `agent/logs/errors.log`.
 
-## Núm vặn — `agent/config.json`
+## Settings: `agent/config.json`
 
-| Núm | Mặc định | Ý nghĩa |
+| Setting | Default | Meaning |
 |---|---|---|
-| `limits.daily_tokens` | 1.500.000 | Trần token/ngày. Giữ dưới 2,5 triệu để nằm trong phần miễn phí |
-| `limits.daily_usd` | 2.5 | Trần tiền/ngày theo giá niêm yết. Không bật chia sẻ dữ liệu thì hạ xuống |
-| `limits.max_steps_per_job` | 14 | Trần bước cho 1 việc |
-| `limits.pause_between_jobs_sec` | 30 | Nghỉ bao nhiêu giây giữa 2 việc |
-| `limits.pause_when_idle_min` | 15 | Não xem rồi mà không có việc đáng làm thì nghỉ bao nhiêu phút |
-| `limits.check_board_sec` | 120 | Bảng chưa có việc/bài mới thì bao nhiêu giây code xem lại (không tốn token) |
-| `brain.model` / `brain.base_url` / `brain.api_key_env` | OpenAI | **Khi FLOP mở: thử đổi 3 dòng này sang compute FLOP. Chưa kiểm chứng: agent cần model gọi được tool, mà ngày 03/11/2026 FLOP chỉ có 1 model và chưa gọi thử được** |
+| `limits.daily_tokens` | 1,500,000 | Daily token cap. Keep under 2.5M to stay in the free tier |
+| `limits.daily_usd` | 2.5 | Daily money cap at list price. Lower it if data sharing is off |
+| `limits.max_steps_per_job` | 14 | Step cap per job |
+| `limits.pause_between_jobs_sec` | 30 | Seconds of rest between jobs |
+| `limits.pause_when_idle_min` | 15 | Minutes to rest when the brain finds nothing worth doing |
+| `limits.check_board_sec` | 120 | How often code re-checks a board with nothing new (no tokens) |
+| `brain.model` / `brain.base_url` / `brain.api_key_env` | OpenAI | **When FLOP opens: try switching these 3 lines to FLOP compute. Unverified: the agent needs a model that can call tools, and on 2026-11-03 FLOP had only 1 model and it could not yet be tested** |
 
-**Lập ngân sách cho cả mùa:** testnet chạy khoảng 90 ngày. Chốt số tiền tối đa bạn chịu bỏ ra,
-chia cho số ngày, rồi đặt `daily_usd` đúng mức đó.
+**Budget for the season:** testnet runs about 90 days. Decide your maximum spend, divide by days, and set `daily_usd` to that.
 
-## Khi có lỗi
+## When something fails
 
-Agent **nhắn Telegram ngay** khi gặp lỗi, không im lặng.
+The agent **messages Telegram immediately** on errors, never silently.
 
-| Agent báo | Làm gì |
+| Agent says | Do this |
 |---|---|
-| `Chưa có key API` / `Key API sai` | Mở `agent/.env`, điền `OPENAI_API_KEY` đúng |
-| `Tài khoản OpenAI hết tiền` | Nạp tại platform.openai.com → Billing |
-| `OpenAI hỏng … Đang dùng Claude` | Có key Claude dự phòng nên agent vẫn chạy. Vẫn nên nạp/sửa OpenAI (não chính). Muốn bật dự phòng: điền `ANTHROPIC_API_KEY` trong `agent/.env` rồi chạy `npm install` trong thư mục `agent` |
-| `Không thấy data/<tên>.json` | Chưa tạo DID: `node scripts/generate-did.js <tên>` |
-| `Kibble 5xx` | Kibble chạy server free nên hay chậm. Agent tự thử lại ở việc sau |
-| Không thấy bot trả lời | Máy đang tắt, hoặc chưa bấm `CAI-TU-CHAY.bat` / `CHAY-AGENT.bat` |
+| `Chưa có key API` / `Key API sai` (key missing / wrong) | Open `agent/.env`, set a correct `OPENAI_API_KEY` |
+| `Tài khoản OpenAI hết tiền` (OpenAI out of credit) | Top up at platform.openai.com → Billing |
+| `OpenAI hỏng … Đang dùng Claude` (OpenAI failed, using Claude) | A Claude backup key keeps the agent running. Still top up or fix OpenAI (main brain). To enable the backup: set `ANTHROPIC_API_KEY` in `agent/.env`, then run `npm install` in the `agent` folder |
+| `Không thấy data/<tên>.json` (file not found) | No DID yet: `node scripts/generate-did.js <name>` |
+| `Kibble 5xx` | Kibble runs on a free server and is often slow. The agent retries on the next job |
+| Bot doesn't reply | PC is off, or `CAI-TU-CHAY.bat` / `CHAY-AGENT.bat` hasn't been run |
 
-## Tự cài bằng tay
+## Manual install
 
-1. Cài [Node.js](https://nodejs.org) bản **LTS**.
-2. Tạo DID (căn cước agent), làm **1 lần duy nhất**: mở Terminal trong folder repo, gõ
-   `node scripts/generate-did.js <ten-ngan-khong-dau>`.
-   👉 **Backup ngay** 2 file `secrets/<ten>.pkcs8.*` và `data/<ten>.json` ra USB hoặc ổ khác. Mất file khoá là mất căn cước, không lấy lại được.
-3. Copy `agent/.env.example` thành `agent/.env`, điền `OPENAI_API_KEY`, `TELEGRAM_BOT_TOKEN`
-   (lấy bằng cách nhắn [@BotFather](https://t.me/BotFather) → `/newbot`), và `DID_LABEL` (tên DID ở bước 2).
-4. Chạy thử 1 việc không cần Telegram: `node agent/thu-1-phien.js`.
-5. Bấm đúp `agent/CAI-TU-CHAY.bat` → mở bot trên Telegram → `/start`.
+1. Install [Node.js](https://nodejs.org) **LTS**.
+2. Create a DID (the agent's identity) **only once**: open a terminal in the repo folder and run
+   `node scripts/generate-did.js <short-name-no-diacritics>`.
+   👉 **Back up immediately** `secrets/<name>.pkcs8.*` and `data/<name>.json` to USB or another drive. Lose the key file and the identity is gone for good.
+3. Copy `agent/.env.example` to `agent/.env`, set `OPENAI_API_KEY`, `TELEGRAM_BOT_TOKEN`
+   (message [@BotFather](https://t.me/BotFather) → `/newbot`), and `DID_LABEL` (the DID name from step 2).
+4. Test 1 job without Telegram: `node agent/thu-1-phien.js`.
+5. Double-click `agent/CAI-TU-CHAY.bat` → open the bot on Telegram → `/start`.
 
-Không cần `npm install`, vì agent không dùng thư viện ngoài.
+No `npm install` needed, because the agent uses no external libraries.
