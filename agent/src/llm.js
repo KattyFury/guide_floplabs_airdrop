@@ -1,11 +1,11 @@
-// Não của agent: API chuẩn OpenAI (chat completions + function calling).
-// Mặc định dùng OpenAI. Đổi sang nhà cung cấp khác (sau này: compute Flop) chỉ bằng
-// cách sửa brain.base_url / brain.model / brain.api_key_env trong config.json.
+// The agent's brain: standard OpenAI API (chat completions + function calling).
+// OpenAI by default. Switching provider (later: Flop compute) only takes
+// editing brain.base_url / brain.model / brain.api_key_env in config.json.
 //
-// Não dự phòng (tuỳ chọn): Claude qua SDK chính thức @anthropic-ai/sdk (config brain_fallback).
-// Chỉ bật khi agent/.env có ANTHROPIC_API_KEY. OpenAI hỏng vì lý do không phải lỗi của request
-// (key sai, hết tiền, quá nhanh, máy chủ lỗi, mất mạng) → hỏi Claude cùng hội thoại đó.
-// Hội thoại vẫn lưu theo định dạng OpenAI; chỉ lúc gửi sang Claude mới đổi định dạng.
+// Backup brain (optional): Claude via the official @anthropic-ai/sdk (config brain_fallback).
+// Enabled only when agent/.env has ANTHROPIC_API_KEY. If OpenAI fails for reasons other than the request itself
+// (wrong key, out of credit, rate limited, server error, network loss) → ask Claude with the same conversation.
+// Conversations stay in OpenAI format; converted only when sent to Claude.
 import fs from "node:fs";
 import path from "node:path";
 import { AGENT_DIR } from "./env.js";
@@ -15,7 +15,7 @@ export class BrainError extends Error {
   constructor(message, { status = 0, fallback = false } = {}) {
     super(message);
     this.status = status;
-    this.fallback = fallback; // true = lỗi phía nhà cung cấp, đáng thử não dự phòng
+    this.fallback = fallback; // true = provider-side error, worth trying the backup brain
   }
 }
 
@@ -52,13 +52,13 @@ async function post(url, key, body) {
       throw new BrainError(`Không kết nối được tới API (${e.message}). Kiểm tra mạng.`, { fallback: true });
     }
     const text = await res.text();
-    // Lỗi máy chủ tạm thời (5xx) → thử lại 1 lần. KHÔNG thử lại lỗi key/hết tiền: báo ngay.
+    // Temporary server errors (5xx) → retry once. Do NOT retry key/credit errors: report at once.
     if (res.status >= 500 && attempt === 1) {
       await sleep(5000);
       continue;
     }
     if (!res.ok) {
-      // Ghi nguyên văn lỗi để biết chính xác vì sao
+      // Log the error verbatim to know exactly why
       logError(`HTTP ${res.status} ${url}`, text);
       throw new BrainError(`${explain(res.status, text)} (HTTP ${res.status})`, { status: res.status, fallback: worthFallback(res.status) });
     }
@@ -66,15 +66,15 @@ async function post(url, key, body) {
   }
 }
 
-// ---- Não dự phòng: Claude ----
+// ---- Backup brain: Claude ----
 
-// Sau lỗi key / hết tiền ở OpenAI thì bỏ qua OpenAI chừng này, để mỗi bước không phải trả 1 lần gọi hỏng trước.
+// After a key/credit error at OpenAI, skip OpenAI this long, so each step doesn't pay for one failed call first.
 const PRIMARY_PAUSE_MS = 5 * 60_000;
 let primaryPausedUntil = 0;
 let claude = null;
 let notify = null;
 
-// bot.js đăng ký hàm báo Telegram: OpenAI hỏng mà chuyển sang Claude thì chủ bot vẫn biết để nạp tiền / sửa key.
+// bot.js registers the Telegram notifier: when OpenAI fails over to Claude, the owner still learns to top up or fix the key.
 export function onFallback(fn) {
   notify = fn;
 }
@@ -105,7 +105,7 @@ const parseArgs = (s) => {
   }
 };
 
-// Hội thoại định dạng OpenAI → định dạng Claude (system tách riêng, tool → tool_result, tin cùng vai gộp lại).
+// OpenAI-format conversation → Claude format (system separated, tool → tool_result, same-role messages merged).
 function toClaude(messages) {
   const system = [];
   const out = [];
@@ -140,7 +140,7 @@ function claudeMeter(fb, u) {
   const read = u.cache_read_input_tokens || 0;
   const write = u.cache_creation_input_tokens || 0;
   const usage = { input: (u.input_tokens || 0) + read + write, cached: read, output: u.output_tokens || 0, reasoning: 0 };
-  const p = fb.price; // đọc cache = 0.1× giá input, ghi cache = 1.25×
+  const p = fb.price; // cache read = 0.1× input price, cache write = 1.25×
   const cost = ((u.input_tokens || 0) * p.input + read * p.input * 0.1 + write * p.input * 1.25 + usage.output * p.output) / 1e6;
   return { usage, cost };
 }
@@ -154,7 +154,7 @@ async function askClaude(cfg, { messages, tools, toolChoice, json }) {
     max_tokens: 16000,
     system: json ? `${conv.system}\n\nRespond with only one JSON object, no other text.` : conv.system,
     messages: conv.messages,
-    thinking: { type: "disabled" }, // như reasoning_effort "none" bên OpenAI; hội thoại không mang khối suy nghĩ nào
+    thinking: { type: "disabled" }, // like OpenAI's reasoning_effort "none"; the conversation carries no thinking blocks
     cache_control: { type: "ephemeral" },
   };
   if (tools?.length) {
@@ -179,7 +179,7 @@ async function askClaude(cfg, { messages, tools, toolChoice, json }) {
   return { message, model: msg.model, ...claudeMeter(fb, msg.usage) };
 }
 
-// Gọi OpenAI; hỏng vì lý do phía nhà cung cấp mà có Claude dự phòng thì gọi Claude.
+// Call OpenAI; on a provider-side failure with a Claude backup available, call Claude.
 async function withFallback(cfg, primary, fallback) {
   if (fallbackReady(cfg) && Date.now() < primaryPausedUntil) return fallback();
   try {
@@ -198,10 +198,10 @@ async function withFallback(cfg, primary, fallback) {
   }
 }
 
-// ---- Gọi não ----
+// ---- Call the brain ----
 
-// Một bước của agent: gửi hội thoại + danh sách tool → não trả lời hoặc gọi tool.
-// convId (prompt_cache_key) giúp các bước cùng phiên dùng chung cache → phần đầu hội thoại rẻ hơn 10 lần.
+// One agent step: send conversation + tool list → the brain answers or calls a tool.
+// convId (prompt_cache_key) lets steps in one session share cache → the conversation start is 10× cheaper.
 export async function step(cfg, stage, { messages, tools, convId }) {
   const b = cfg.brain;
   return withFallback(
@@ -223,7 +223,7 @@ export async function step(cfg, stage, { messages, tools, convId }) {
   );
 }
 
-// Hỏi não 1 lần, không tool (ví dụ: soạn việc để đăng). Người gọi tự ghi log token.
+// Ask the brain once, no tools (e.g. drafting a job to post). The caller logs tokens.
 export async function ask(cfg, { system, user, json = false }) {
   const b = cfg.brain;
   const messages = [{ role: "system", content: system }, { role: "user", content: user }];
@@ -238,7 +238,7 @@ export async function ask(cfg, { system, user, json = false }) {
     },
     async () => {
       const r = await askClaude(cfg, { messages, json });
-      // Claude đôi khi bọc JSON trong ```json ... ``` → bỏ để JSON.parse ở nơi gọi không vỡ.
+      // Claude sometimes wraps JSON in ```json ... ``` → strip so the caller's JSON.parse doesn't break.
       const text = json ? (r.message.content || "").replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "") : r.message.content || "";
       return { text, model: r.model, usage: r.usage, cost: r.cost };
     },
@@ -250,10 +250,10 @@ function meter(b, data) {
   const usage = {
     input: u.prompt_tokens || 0,
     cached: u.prompt_tokens_details?.cached_tokens || 0,
-    output: u.completion_tokens || 0, // OpenAI: đã gồm token suy nghĩ ẩn
+    output: u.completion_tokens || 0, // OpenAI: includes hidden thinking tokens
     reasoning: u.completion_tokens_details?.reasoning_tokens || 0,
   };
-  // Giá niêm yết (khi vượt phần token miễn phí mỗi ngày mới bị tính tiền thật).
+  // List price (real money is charged only beyond the daily free tokens).
   const p = b.price;
   const cost = ((usage.input - usage.cached) * p.input + usage.cached * p.cached + usage.output * p.output) / 1e6;
   return { usage, cost };

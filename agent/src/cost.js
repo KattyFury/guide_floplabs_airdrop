@@ -1,4 +1,4 @@
-// Ghi token + tiền của từng lần gọi não, để luôn trả lời được "vì sao tốn".
+// Log tokens + money per brain call, so "why did it cost this" can always be answered.
 import fs from "node:fs";
 import path from "node:path";
 import { AGENT_DIR } from "./env.js";

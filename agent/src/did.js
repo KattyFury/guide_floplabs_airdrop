@@ -1,5 +1,5 @@
-// Đọc DID (căn cước agent) đã tạo bằng scripts/generate-did.js và ký tin nhắn.
-// Khoá bí mật nằm ở secrets/ (không bao giờ lên GitHub).
+// Reads the DID (agent identity) created by scripts/generate-did.js and signs messages.
+// Secret keys live in secrets/ (never on GitHub).
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -21,7 +21,7 @@ export function loadDid(label) {
   return { did: id.did, label, key };
 }
 
-// Technocore thay ký tự điều khiển/định dạng bằng dấu cách trước khi lưu → phải ký đúng chữ sau khi "quét".
+// Technocore replaces control/format characters with spaces before storing → sign the text as it will be after that "scrub".
 export function sweep(text) {
   return String(text).replace(/[\p{Cc}\p{Cf}\p{Cs}\p{Co}\p{Zl}\p{Zp}]/gu, " ").trim();
 }

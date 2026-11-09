@@ -1,11 +1,11 @@
-// Phần Telegram của agent (bot.js): gửi tin, trạng thái, báo cáo ngày, chủ bot.
+// The agent's Telegram part (bot.js): send messages, status, daily report, bot owner.
 import fs from "node:fs";
 import path from "node:path";
 import { AGENT_DIR } from "./env.js";
 import { loadMemory, dayOf } from "./agent.js";
 import * as kibble from "./kibble.js";
 
-const STATE_FILE = path.join(AGENT_DIR, "data", "bot.json"); // chủ bot, tạm dừng, ngày đã báo cáo
+const STATE_FILE = path.join(AGENT_DIR, "data", "bot.json"); // bot owner, paused, date last reported
 
 export function state() {
   try {
@@ -46,8 +46,8 @@ export const COMMANDS = [
   { command: "help", description: "Agent này làm gì" },
 ];
 
-// Mọi tin nhắn đều kèm dòng gợi ý lệnh ở cuối, để người dùng luôn biết mình gõ được gì.
-// Trả về true nếu gửi được hết.
+// Every message ends with a command hint line, so the user always knows what can be typed.
+// Returns true if everything was sent.
 export async function send(tg, text, chatId = state().owner) {
   if (!chatId) return console.log(`(chưa có chủ bot, không gửi được) ${text}`), false;
   text += FOOTER;
@@ -76,8 +76,8 @@ export async function statusText(cfg, id) {
   ].join("\n");
 }
 
-// Báo cáo 1 ngày: gửi khi hết ngân sách token trong ngày, hoặc 7h sáng hôm sau (0h UTC) nếu hôm đó dừng sớm.
-// Chỉ đánh dấu "đã báo cáo" khi gửi được — mất mạng thì lần sau gửi lại.
+// Daily report: sent when the day's token budget runs out, or at 7 AM next day (00:00 UTC) if it stopped early.
+// Marked "reported" only when sent; on network loss it is resent later.
 export async function dailyReport(tg, id, date, why = "") {
   const d = loadMemory().days[date];
   if (!d) return setState({ reported: date });
@@ -102,7 +102,7 @@ export async function dailyReport(tg, id, date, why = "") {
   if (ok) setState({ reported: date });
 }
 
-// Người nhắn đầu tiên thành chủ bot. Trả về true nếu tin nhắn là của chủ.
+// The first person to message becomes the bot owner. Returns true if the message is from the owner.
 export async function claimOwner(tg, msg) {
   if (!state().owner) {
     setState({ owner: msg.from.id, owner_name: msg.from.username || msg.from.first_name });

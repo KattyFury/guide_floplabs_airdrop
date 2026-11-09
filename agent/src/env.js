@@ -1,5 +1,5 @@
-// Đọc file .env (không cần thư viện ngoài).
-// Mặc định đọc agent/.env. Có thể trỏ sang file khác bằng biến ENV_FILE.
+// Read the .env file (no external library).
+// Reads agent/.env by default. Point elsewhere with the ENV_FILE variable.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

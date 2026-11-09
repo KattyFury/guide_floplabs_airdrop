@@ -1,8 +1,8 @@
-// Chạy nền trên máy. Máy bật → agent tự tìm việc liên tục (làm việc + chấm bài),
-// báo kết quả qua Telegram, trả lời lệnh ngay. Dừng chương trình (tắt máy) = agent nghỉ.
+// Runs in the background. PC on → the agent keeps finding work (doing and grading),
+// reports via Telegram, answers commands at once. Stopping the program (PC off) = agent rests.
 //
-// Lệnh Telegram: /status · /run · /pause · /resume · /help
-// Nhắn tin thường (câu hỏi / ý tưởng) → soạn thành 1 việc, bấm ✅ Đăng thì mới đăng lên Kibble.
+// Telegram commands: /status · /run · /pause · /resume · /help
+// Plain messages (questions/ideas) → drafted as a job, posted to Kibble only after tapping ✅ Đăng.
 import crypto from "node:crypto";
 import { loadEnv, loadConfig } from "./src/env.js";
 import { loadDid } from "./src/did.js";
@@ -22,11 +22,11 @@ try {
 const cfg = loadConfig();
 const id = loadDid(process.env.DID_LABEL);
 let running = false;
-let wake = null; // đánh thức vòng chạy sớm (khi gõ /run, /resume)
+let wake = null; // wake the loop early (on /run, /resume)
 const send = (text, chatId) => T.send(tg, text, chatId);
-onFallback((text) => send(text)); // OpenAI hỏng → chuyển Claude dự phòng: báo chủ bot để nạp tiền / sửa key
+onFallback((text) => send(text)); // OpenAI failed → switch to Claude backup: tell the bot owner to top up or fix the key
 
-// Gửi báo cáo 1 ngày, không gửi trùng khi hẹn giờ và vòng việc cùng gọi.
+// Send the daily report once, even when the timer and the work loop both call it.
 let reporting = false;
 async function report(date, why) {
   if (reporting || T.state().reported === date) return;
@@ -38,8 +38,8 @@ async function report(date, why) {
   }
 }
 
-// Sang ngày mới (0h UTC = 7h sáng giờ VN) → gửi ngay báo cáo hôm qua, không đợi vòng việc tiếp theo.
-// Kiểm tra mỗi phút, gửi lỗi thì phút sau thử lại.
+// New day (00:00 UTC = 7 AM Vietnam) → send yesterday's report now, without waiting for the next work round.
+// Check each minute; if sending fails, retry the next minute.
 function reportYesterday() {
   const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   if ((T.state().reported || "") >= y) return;
@@ -59,7 +59,7 @@ Gõ / để mở menu lệnh bất cứ lúc nào.
 
 📮 Muốn nhờ cả mạng làm giúp? Nhắn thẳng câu hỏi (tiếng Việt cũng được). Mình soạn lại thành 1 việc chuẩn tiếng Anh, bạn bấm ✅ Đăng thì mới đăng lên Kibble bằng DID của bạn (+2 điểm/việc). Có agent nộp bài là mình báo ngay kèm bản dịch, bạn bấm 👍 Đạt (ACCEPT, +1) hoặc 👎 Không đạt. Đăng ít mà chất — đăng hàng loạt việc na ná nhau bị coi là cày điểm.`;
 
-// Nháp việc chờ chủ bấm nút (mất khi bot khởi động lại).
+// Job drafts waiting for the owner's button tap (lost when the bot restarts).
 const drafts = new Map();
 
 async function onIdea(msg) {
@@ -81,7 +81,7 @@ async function onIdea(msg) {
   });
 }
 
-// Cứ 2 phút xem việc mình đăng có bài nộp mới chưa → báo Telegram (kèm bản dịch) + nút chấm.
+// Every 2 minutes check for new submissions on our posted jobs → Telegram (with translation) + grading buttons.
 let checking = false;
 async function checkAnswers() {
   if (checking) return;
@@ -116,7 +116,7 @@ async function onButton(q) {
   await tg("answerCallbackQuery", { callback_query_id: q.id }).catch(() => {});
   if (q.from.id !== T.state().owner) return;
   const [act, key] = String(q.data).split(":");
-  // Bỏ nút để không bấm 2 lần.
+  // Remove the buttons to prevent double taps.
   await tg("editMessageReplyMarkup", { chat_id: q.message.chat.id, message_id: q.message.message_id, reply_markup: { inline_keyboard: [] } }).catch(() => {});
   if (act === "acc" || act === "rej") {
     const r = await judgeAnswer(id, key, act === "acc");
@@ -141,32 +141,32 @@ async function session(trigger) {
   }
   running = true;
   try {
-    // Sang ngày mới mà chưa báo cáo hôm qua → báo hôm qua trước.
+    // New day with yesterday unreported → report yesterday first.
     const last = T.state().last_day;
     if (last && last !== today()) await report(last);
     T.setState({ last_day: today() });
 
     const r = await runSession(cfg, id);
     if (r.idle) {
-      // Bảng chưa có gì mới → không hỏi não, chỉ báo khi người dùng tự gõ /run.
+      // Nothing new on the board → don't ask the brain, reply only when the user typed /run.
       if (trigger !== "tự động" && trigger !== "khởi động") await send(`😴 ${r.reason}`);
       return r;
     }
     console.log(`→ việc mới (${trigger}) ${new Date().toLocaleTimeString()}`);
     if (r.skipped) {
       if (trigger !== "tự động") await send(`😴 ${r.reason}`);
-      // Hết ngân sách token hôm nay → gửi báo cáo ngày (1 lần).
+      // Today's token budget is used up → send the daily report (once).
       await report(today(), r.reason);
       return r;
     }
-    // Chỉ nhắn khi người dùng tự gõ /run. Còn lại: mỗi ngày 1 báo cáo, để không spam.
+    // Message only when the user typed /run. Otherwise one report a day, to avoid spam.
     if (trigger !== "tự động" && trigger !== "khởi động") {
       const lines = r.done.map((d) => `• ${d}`).join("\n") || "• (chưa có việc nào đáng làm)";
       await send(`✅ Xong 1 việc\n\n${lines}\n\n📝 ${r.summary}\n\n${await T.statusText(cfg, id)}`);
     }
     return r;
   } catch (e) {
-    // Hết tiền / sai key / Kibble sập → báo ngay, không im lặng.
+    // Out of credit / wrong key / Kibble down → report at once, never silently.
     console.log(`  ✗ ${e.message}`);
     await send(`❌ Agent gặp lỗi: ${e.message}`);
     return { error: true };
@@ -199,7 +199,7 @@ async function onMessage(msg) {
 
 async function main() {
   const me = await tg("getMe", {});
-  // Menu lệnh hiện sẵn ở nút "/" cạnh ô chat Telegram.
+  // Command menu shown at the "/" button beside Telegram's chat box.
   await tg("setMyCommands", { commands: T.COMMANDS }).catch((e) => console.log(`⚠️ ${e.message}`));
   console.log(`✅ Agent đang chạy: https://t.me/${me.username}`);
   console.log(`   DID: ${id.did}`);
@@ -207,17 +207,17 @@ async function main() {
 
   setInterval(reportYesterday, 60_000);
   setInterval(checkAnswers, 2 * 60_000);
-  watchRoom(); // đọc room kibble liên tục để bắt bài nộp cho việc mình đăng
+  watchRoom(); // continuously read room kibble to catch submissions for our posted jobs
 
-  // Vòng chạy liên tục: mỗi vòng = 1 việc. Xong việc → nghỉ 30 giây rồi làm việc tiếp; bảng chưa có gì mới → xem lại sau 2 phút
-  // (code tự xem, 0 token); não xem rồi mà không có việc đáng làm → nghỉ 15 phút; hết token → nghỉ 30 phút.
+  // Continuous loop: each round = 1 job. Job done → rest 30 s then next job; board has nothing new → check again in 2 minutes
+  // (code checks, 0 tokens); brain looked but found nothing worth doing → rest 15 minutes; out of tokens → rest 30 minutes.
   (async () => {
     const L = cfg.limits;
     for (;;) {
-      let wait = L.pause_when_idle_min * 60; // giây
+      let wait = L.pause_when_idle_min * 60; // seconds
       if (!T.state().paused) {
         const r = await session(wake ? "tự động" : "khởi động");
-        if (r && !r.skipped && !r.error && r.done.length) wait = L.pause_between_jobs_sec; // vừa xong 1 việc → làm việc tiếp
+        if (r && !r.skipped && !r.error && r.done.length) wait = L.pause_between_jobs_sec; // just finished a job → do the next
         if (r?.idle) wait = L.check_board_sec;
         if (r?.skipped) wait = 30 * 60;
       }

@@ -1,5 +1,5 @@
-// Nói chuyện với Kibble (kibble.world) — bảng việc cho agent trên Technocore.
-// Luật gốc: https://kibble.world/llms.txt
+// Talks to Kibble (kibble.world), a job board for agents on Technocore.
+// Source rules: https://kibble.world/llms.txt
 import { sign, sweep } from "./did.js";
 
 const BASE = "https://kibble.world";
@@ -11,7 +11,7 @@ async function getJson(url, timeout = 120_000) {
   return r.json();
 }
 
-// Bảng việc nặng (~0.5 MB) và server free hay chậm → giữ bản đọc gần nhất 2 phút.
+// The board is heavy (~0.5 MB) and the free server is often slow → keep the latest read for 2 minutes.
 let boardCache = { at: 0, data: null };
 export async function board() {
   if (Date.now() - boardCache.at < 120_000) return boardCache.data;
@@ -30,7 +30,7 @@ export async function score(did) {
   return getJson(`${BASE}/api/score?did=${encodeURIComponent(did)}`, 60_000);
 }
 
-// Ký và gửi 1 dòng lên Kibble qua relay của nó (gửi thẳng Technocore thì bảng việc cập nhật rất chậm).
+// Sign and send one line to Kibble via its relay (sending directly to Technocore updates the board very slowly).
 export async function post(id, text) {
   const clean = sweep(text).slice(0, 4000);
   const nonce = String(Math.max(Date.now(), nonceLast + 1));
@@ -49,6 +49,6 @@ export async function post(id, text) {
   } catch {
     j = { ok: false, error: body.slice(0, 200) };
   }
-  boardCache.at = 0; // bảng đã đổi
+  boardCache.at = 0; // board changed
   return { ok: r.ok && j.ok !== false, ...j, http: r.status };
 }

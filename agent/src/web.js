@@ -1,5 +1,5 @@
-// Tự tìm + tự đọc web MIỄN PHÍ (không cần key), thay cho tool tìm web trả phí của Grok.
-// Grok chỉ nhận phần chữ đã cắt gọn → ít token hơn nhiều.
+// FREE web search + page reading (no key), replacing Grok's paid web search tool.
+// Grok only receives trimmed text → far fewer tokens.
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -25,7 +25,7 @@ async function get(url) {
   return r.ok ? r.text() : "";
 }
 
-// Brave Search (trang HTML). Đã thử 18/10: tìm 5 lần liên tiếp vẫn ra kết quả tốt.
+// Brave Search (HTML page). Tested 10/18: 5 searches in a row still gave good results.
 async function brave(query, n) {
   const html = await get(`https://search.brave.com/search?q=${encodeURIComponent(query)}&source=web`);
   return html
@@ -40,7 +40,7 @@ async function brave(query, n) {
     .slice(0, n);
 }
 
-// DuckDuckGo (bản HTML) — dự phòng. Hay bắt giải captcha sau ~3 lần tìm liền.
+// DuckDuckGo (HTML version), backup. Often demands a captcha after ~3 consecutive searches.
 async function ddg(query, n) {
   const html = await get(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`);
   const out = [];
@@ -54,7 +54,7 @@ async function ddg(query, n) {
   return out;
 }
 
-// Wikipedia — API chính thức, miễn phí, không chặn bot. Dự phòng chắc chắn khi Brave/DuckDuckGo chặn.
+// Wikipedia: official API, free, doesn't block bots. Reliable backup when Brave/DuckDuckGo block.
 async function wikipedia(query, n) {
   const q = String(query).replace(/\bsite:\S+/g, " ").trim();
   const r = await fetch(
@@ -69,23 +69,23 @@ async function wikipedia(query, n) {
   }));
 }
 
-// Tìm web miễn phí. Trả về [{title, url, snippet}].
-// Thứ tự: Brave → DuckDuckGo → Wikipedia. (Brave/DDG hay chặn khi tìm dồn dập; Bing bị loại vì trả kết quả rác cho bot.)
-let blockedUntil = 0; // Brave/DDG vừa chặn → bỏ qua chúng 10 phút, đi thẳng Wikipedia
+// Free web search. Returns [{title, url, snippet}].
+// Order: Brave → DuckDuckGo → Wikipedia. (Brave/DDG often block bursts; Bing excluded for returning junk to bots.)
+let blockedUntil = 0; // Brave/DDG just blocked → skip them for 10 minutes, go straight to Wikipedia
 export async function search(query, n = 5) {
   const engines = Date.now() < blockedUntil ? [wikipedia] : [brave, ddg, wikipedia];
   for (const engine of engines) {
     if (engine === wikipedia && engines.length > 1) blockedUntil = Date.now() + 600_000;
     try {
       const r = await engine(query, n);
-      await sleep(1000); // tìm dồn dập dễ bị chặn
+      await sleep(1000); // bursts are easily blocked
       if (r.length) return r;
     } catch {}
   }
   return [];
 }
 
-// Tải trực tiếp 1 trang HTML → chữ thuần. Trả "" nếu không phải HTML (VD PDF) hoặc lỗi.
+// Fetch one HTML page → plain text. Returns "" if not HTML (e.g. PDF) or on error.
 async function fetchHtml(url) {
   try {
     const r = await fetch(url, {
@@ -111,7 +111,7 @@ async function fetchHtml(url) {
   }
 }
 
-// Dự phòng miễn phí: Jina Reader đọc được PDF (báo cáo thường niên…) và trang viết bằng JavaScript.
+// Free fallback: Jina Reader handles PDFs (annual reports…) and JavaScript pages.
 async function fetchJina(url) {
   try {
     const r = await fetch(`https://r.jina.ai/${url}`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(90_000) });
@@ -121,19 +121,19 @@ async function fetchJina(url) {
   }
 }
 
-// Toàn văn trang (đã tải) — giữ lại để đối chiếu bằng chứng khi nộp bài.
+// Full page text (fetched), kept to check evidence at submission.
 const pages = new Map();
 export async function fullText(url) {
   if (pages.has(url)) return pages.get(url);
   let text = /\.pdf($|\?)/i.test(url) ? "" : await fetchHtml(url);
-  if (text.length < 800) text = (await fetchJina(url)) || text; // PDF / trang JS / trang bị chặn
+  if (text.length < 800) text = (await fetchJina(url)) || text; // PDF / JS page / blocked page
   pages.set(url, text);
   return text;
 }
 export const pageCache = pages;
 
-// Đọc 1 trang. Có `find` (từ khoá, cách nhau bằng dấu phẩy) → trả các đoạn quanh từ khoá ở BẤT KỲ đâu trong trang
-// (bảng số trong báo cáo thường nằm rất sâu). Không có `find` → trả phần đầu trang.
+// Read a page. With `find` (comma-separated keywords) → returns passages around keywords ANYWHERE on the page
+// (number tables in reports are often very deep). Without `find` → returns the start of the page.
 export async function readPage(url, maxChars = 4000, find = "") {
   const text = await fullText(url);
   if (!text) return "";

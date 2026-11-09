@@ -1,4 +1,4 @@
-// Chạy thử 1 việc không cần Telegram:  node agent/thu-1-phien.js
+// Test 1 job without Telegram:  node agent/thu-1-phien.js
 import { loadEnv, loadConfig } from "./src/env.js";
 import { loadDid } from "./src/did.js";
 import { runSession } from "./src/agent.js";

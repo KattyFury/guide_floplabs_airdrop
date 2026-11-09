@@ -1,9 +1,9 @@
-// AGENT KIBBLE — làm việc (worker) + chấm bài (validator) trên kibble.world.
+// AGENT KIBBLE: works (worker) + grades (validator) on kibble.world.
 //
-// Đây là agent, không phải bot: code KHÔNG quyết định làm việc nào, chấm bài nào, chấm ra sao.
-// Code chỉ đưa cho não một mục tiêu + bộ tool + bộ nhớ, rồi lặp:
-//   não chọn tool → code chạy tool → trả kết quả cho não → não nghĩ tiếp … → não gọi finish.
-// Code chỉ chặn GIỚI HẠN an toàn: token/ngày, tiền/ngày, số bước/việc, cấm tự chấm, cấm làm trùng.
+// This is an agent, not a bot: code does NOT decide which jobs to do, which to grade, or how to grade.
+// Code only gives the brain a goal + tools + memory, then loops:
+//   brain picks a tool → code runs it → returns the result → brain thinks further … → brain calls finish.
+// Code only enforces SAFETY limits: tokens/day, money/day, steps/job, no self-grading, no duplicates.
 import fs from "node:fs";
 import path from "node:path";
 import { AGENT_DIR } from "./env.js";
@@ -14,8 +14,8 @@ import * as web from "./web.js";
 
 const MEM_FILE = path.join(AGENT_DIR, "data", "memory.json");
 
-// Mọi DID có trên máy này (data/*.json). Agent KHÔNG BAO GIỜ chấm hay nhận việc của các DID này:
-// tự chấm bài của chính mình bằng DID khác = "manufactured activity", Flop loại thẳng tài khoản.
+// Every DID on this machine (data/*.json). The agent NEVER grades or claims jobs of these DIDs:
+// grading yourself with another DID = "manufactured activity", Flop excludes the account outright.
 function ownedDids() {
   const dir = path.join(AGENT_DIR, "..", "data");
   const out = new Set();
@@ -31,14 +31,14 @@ function ownedDids() {
 }
 export const today = () => new Date().toISOString().slice(0, 10);
 
-// ---------- Bộ nhớ dài hạn (file data/memory.json) ----------
+// ---------- Long-term memory (data/memory.json) ----------
 export function loadMemory() {
   let m = {};
   try {
     m = JSON.parse(fs.readFileSync(MEM_FILE, "utf8"));
   } catch {}
   const out = { judged: {}, worked: {}, skipped: {}, days: {}, notes: [], ...m };
-  // việc đã bỏ chỉ nhớ 3 ngày (đề có thể được sửa lại)
+  // skipped jobs are remembered only 3 days (the brief may be revised)
   for (const [k, v] of Object.entries(out.skipped)) if (Date.now() - Date.parse(v.at) > 3 * 86400_000) delete out.skipped[k];
   return out;
 }
@@ -52,7 +52,7 @@ export function dayOf(m) {
   return d;
 }
 
-// ---------- Mục tiêu giao cho não (cố định chữ để được cache) ----------
+// ---------- Goal given to the brain (fixed text so it caches) ----------
 const SYSTEM = `You are an autonomous agent on Kibble, a public job board for AI agents (practice for the FLOP network).
 You play two roles with one DID:
 - WORKER: claim an OPEN job, do the work, deliver a RESULT that meets the job's success condition (+6 points when others attest it useful, -3 when not).
@@ -137,9 +137,9 @@ const TOOLS = [
 const cut = (s, n) => (String(s || "").length > n ? String(s).slice(0, n) + " …" : String(s || ""));
 const oneLine = (s) => String(s || "").replace(/\s*\n+\s*/g, " / ").replace(/\|/g, "/");
 
-let lastIdleBoard = ""; // danh sách việc lúc não xem lần trước mà không làm gì
+let lastIdleBoard = ""; // job list from when the brain last looked and did nothing
 
-// ---------- Chạy 1 vòng = 1 việc (làm 1 việc HOẶC chấm 1 bài) ----------
+// ---------- Run 1 round = 1 job (do 1 job OR grade 1 result) ----------
 export async function runSession(cfg, id, log = console.log) {
   const L = cfg.limits;
   const mem = loadMemory();
@@ -163,8 +163,8 @@ export async function runSession(cfg, id, log = console.log) {
     (j.status === "delivered" || (j.status === "attested" && (j.useful_n || 0) + (j.not_n || 0) < 2)) &&
     j.result && !mem.judged[j.job_id] && !mem.worked[j.job_id] && !mine.has(j.poster_did) && !mine.has(j.worker_did);
 
-  // Xem bảng bằng code trước (0 token): không có việc mới / bài mới, hoặc vẫn đúng mấy việc não vừa xem
-  // mà không làm, thì khỏi hỏi não.
+  // Check the board by code first (0 tokens): no new job/result, or the same jobs the brain just saw
+  // and skipped, then don't ask the brain.
   let seen = "";
   if (!claimed.size) {
     try {
@@ -179,13 +179,13 @@ export async function runSession(cfg, id, log = console.log) {
   startRun(`kibble ${today()}`);
   day.sessions++;
   const convId = `kibble-${id.did.slice(-8)}-${Date.now()}`;
-  const done = []; // việc xong trong vòng này (0 hoặc 1)
+  const done = []; // jobs finished this round (0 or 1)
   const webUses = {};
   let skips = 0;
   let summary = "";
   mem.log ||= [];
 
-  // Mỗi vòng bắt đầu với đầu óc mới: chỉ mang theo ghi chú + 5 việc gần nhất (bộ nhớ dài hạn).
+  // Each round starts fresh: only notes + the 5 latest jobs (long-term memory) carry over.
 
   const goal = () =>
     `Today ${today()}. Tokens left today: ${(L.daily_tokens - day.tokens).toLocaleString("en")}. ` +
@@ -265,14 +265,14 @@ export async function runSession(cfg, id, log = console.log) {
     },
     async submit_result({ job_id, result, evidence = [] }) {
       if (!claimed.has(job_id)) return "BLOCKED: you have not claimed this job.";
-      // CHẶN BỊA SỐ: mỗi câu trích phải có thật trên trang đã đọc trong vòng này,
-      // và mỗi con số trong bài phải nằm trong câu trích (hoặc trong chính đề bài).
+      // BLOCK FABRICATED NUMBERS: every quote must really be on a page read this round,
+      // and every number in the submission must be inside a quote (or in the job brief itself).
       const norm = (t) => String(t || "").toLowerCase().replace(/\s+/g, " ").trim();
       const digits = (t) => String(t || "").replace(/[^0-9]/g, "");
       const bad = [];
       const j = await findJob(job_id);
-      // Chỉ việc tra cứu/xác minh (research, review) mới bắt buộc bằng chứng. Việc giải thích / viết code thì
-      // số trong ví dụ minh hoạ (VD "người nặng 70 kg") không cần nguồn.
+      // Only research/verification jobs (research, review) require evidence. In explain/code jobs
+      // numbers in illustrative examples (e.g. "a 70 kg person") need no source.
       const needsEvidence = ["research", "review"].includes(j?.category) || /^(find|verify|locate|look up|what is)/i.test(j?.title || "");
       for (const e of needsEvidence ? evidence : []) {
         const page = web.pageCache.get(e.url);
@@ -352,7 +352,7 @@ export async function runSession(cfg, id, log = console.log) {
         }
         messages.push({ role: "tool", tool_call_id: c.id, content: cut(typeof out === "string" ? out : JSON.stringify(out), 6000) });
         if (process.env.AGENT_DEBUG) log(`   · ${name}(${cut(JSON.stringify(args), 140)}) → ${cut(String(typeof out === "string" ? out : JSON.stringify(out)).replace(/\s+/g, " "), 200)}`);
-        // Xong 1 việc (nộp bài hoặc chấm bài) → vòng này kết thúc.
+        // One job finished (submitted or graded) → this round ends.
         if (["attest", "submit_result"].includes(name) && /^(Posted|Delivered)/.test(out)) {
           summary = done.at(-1);
           throw { finished: true };
