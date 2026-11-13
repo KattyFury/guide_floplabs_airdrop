@@ -199,7 +199,13 @@ function meter(b, data) {
 async function callBrain(b, { messages, tools, json, convId }) {
   if (isFlop(b)) {
     if (Date.now() < flopState.pausedUntil) throw new BrainError(flopState.why, { fallback: true });
-    let key = await flopKey(b);
+    let key;
+    try {
+      key = await flopKey(b);
+    } catch (e) {
+      pauseFlop(60 * 60_000, e.message); // no key (allowance expired / enrollment closed): tell the owner once, retry in 1 h
+      throw e;
+    }
     let last;
     for (const model of b.models || [b.model]) {
       const body = { model, messages: forModel(model, messages), max_tokens: b.max_tokens || 1500 };
