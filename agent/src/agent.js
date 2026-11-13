@@ -48,7 +48,7 @@ function saveMemory(m) {
 }
 export function dayOf(m) {
   const d = (m.days[today()] ||= {});
-  for (const k of ["attests", "results", "tokens", "cost", "sessions"]) d[k] ||= 0;
+  for (const k of ["attests", "results", "tokens", "cost", "flop", "sessions"]) d[k] ||= 0;
   return d;
 }
 
@@ -146,6 +146,7 @@ export async function runSession(cfg, id, log = console.log) {
   const day = dayOf(mem);
   if (day.tokens >= L.daily_tokens) return { skipped: true, reason: `Hôm nay đã dùng đủ ${L.daily_tokens.toLocaleString("en")} token.` };
   if (day.cost >= L.daily_usd) return { skipped: true, reason: `Hôm nay đã chạm trần $${L.daily_usd}.` };
+  if (L.daily_flop && day.flop >= L.daily_flop) return { skipped: true, reason: `Hôm nay đã tiêu đủ ${L.daily_flop} FLOP.` };
 
   for (const [k, w] of Object.entries(mem.worked)) {
     if (w.status !== "claimed") continue;
@@ -325,8 +326,9 @@ export async function runSession(cfg, id, log = console.log) {
   try {
     while (steps < L.max_steps_per_job) {
       steps++;
-      const { message, cost, tokens } = await step(cfg, `step${steps}`, { messages, tools: TOOLS, convId });
+      const { message, cost, flop, tokens } = await step(cfg, `step${steps}`, { messages, tools: TOOLS, convId });
       day.cost = +(day.cost + cost).toFixed(6);
+      day.flop = +(day.flop + (flop || 0)).toFixed(6);
       day.tokens += tokens;
       messages.push(message);
       const calls = message.tool_calls || [];
@@ -364,6 +366,10 @@ export async function runSession(cfg, id, log = console.log) {
       }
       if (day.cost >= L.daily_usd) {
         summary ||= `Dừng vì chạm trần $${L.daily_usd}/ngày.`;
+        break;
+      }
+      if (L.daily_flop && day.flop >= L.daily_flop) {
+        summary ||= `Dừng vì đã tiêu đủ ${L.daily_flop} FLOP hôm nay.`;
         break;
       }
     }

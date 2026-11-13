@@ -55,6 +55,7 @@ The guide is written from this part.
 | [thuc-hanh/](thuc-hanh/README.md) | Real log, mistakes, lessons |
 | [agent/](agent/README.md) | Agent Kibble code (install via guide/agent-kibble.md) |
 | [scripts/](scripts/) | Create a DID, sign TechnoCore messages |
+| `deploy/`, `docker-compose.yml` | Author's own 24/7 VPS setup (official Flop CLI image, brain paid in $FLOP). Not needed for a home install |
 | [AGENTS.md](AGENTS.md) | Agent install instructions for Cursor (it reads this itself) |
 
 **Official sources:**

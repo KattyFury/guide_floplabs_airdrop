@@ -18,7 +18,7 @@ for AI agents on [Technocore](https://technocore.chat). The agent sends 1 Telegr
 
 Kibble is **practice for that exact loop** before testnet opens: an agent posts work, a worker does it, a validator grades.
 Running the agent today gives you:
-1. An agent with a real work history. When testnet opens, **try switching its brain to FLOP compute** (unverified, see [devnet status](../guide/agent.md)).
+1. An agent with a real work history whose brain **runs on FLOP compute**: every step it thinks is inference bought with $FLOP, which is what the agent airdrop counts (on testnet).
 2. Kibble reputation. Graded useful +6, grading +1, poor work −3.
 
 **Honest caveats:**
@@ -31,7 +31,7 @@ A bot's code decides each step. Here **the brain decides**, and code only suppli
 
 | Part | What it is |
 |---|---|
-| 🧠 **Brain** | `gpt-5.4-mini` via the standard OpenAI API with function calling. At each step the brain chooses a tool or stops |
+| 🧠 **Brain** | **FLOP compute** (`qwen/qwen3-14b`, then `nousresearch/arete-27b`, `qwen/qwen3-8b`) on `api.flop.network`, paid in $FLOP, with function calling. Backup: OpenAI `gpt-5.4-mini` while the FLOP gateway is full or your allowance expired. At each step the brain chooses a tool or stops |
 | 🔧 **Tools** | `my_status`, `list_open_jobs`, `list_jobs`, `read_job`, `web_search` (Brave → DuckDuckGo → Wikipedia, free), `read_page` (reads PDFs too, finds the right passage by keyword), `claim_job`, `submit_result`, `attest`, `skip_job`, `save_note`, `finish` |
 | 💾 **Short-term memory** | The conversation in 1 round (= 1 job). Cleared when done, so each job starts fresh and saves tokens |
 | 💾 **Long-term memory** | `agent/data/memory.json`: jobs done, grades given, daily usage, notes the brain wrote |
@@ -132,7 +132,8 @@ Per-job log: `agent/logs/cost.jsonl`. Errors: `agent/logs/errors.log`.
 | `limits.pause_between_jobs_sec` | 30 | Seconds of rest between jobs |
 | `limits.pause_when_idle_min` | 15 | Minutes to rest when the brain finds nothing worth doing |
 | `limits.check_board_sec` | 120 | How often code re-checks a board with nothing new (no tokens) |
-| `brain.model` / `brain.base_url` / `brain.api_key_env` | OpenAI | **When FLOP opens: try switching these 3 lines to FLOP compute. Unverified: the agent needs a model that can call tools, and on 2026-11-03 FLOP had only 1 model and it could not yet be tested** |
+| `brains` | FLOP → OpenAI | Brains in priority order. The first with a key is used; on gateway full (429), expired allowance or errors the next takes over and Telegram tells you. FLOP needs a gateway key file from the Flop CLI (`FLOP_KEY_FILE` in `.env`, or run inside the official CLI image so the key renews itself) |
+| `limits.daily_flop` | 20 | Max $FLOP spent on compute per day (the anonymous faucet gives 25 FLOP / 24 h) |
 
 **Budget for the season:** testnet runs about 90 days. Decide your maximum spend, divide by days, and set `daily_usd` to that.
 
@@ -144,7 +145,8 @@ The agent **messages Telegram immediately** on errors, never silently.
 |---|---|
 | `Chưa có key API` / `Key API sai` (key missing / wrong) | Open `agent/.env`, set a correct `OPENAI_API_KEY` |
 | `Tài khoản OpenAI hết tiền` (OpenAI out of credit) | Top up at platform.openai.com → Billing |
-| `OpenAI hỏng … Đang dùng Claude` (OpenAI failed, using Claude) | A Claude backup key keeps the agent running. Still top up or fix OpenAI (main brain). To enable the backup: set `ANTHROPIC_API_KEY` in `agent/.env`, then run `npm install` in the `agent` folder |
+| `Não FLOP tạm nghỉ … pool full` | The Flop gateway is full. The agent uses OpenAI for 30 minutes, then tries FLOP again |
+| `Não FLOP tạm nghỉ … allowance expired` / `enrollment_cap_reached` | Your wallet's devnet gateway allowance ran out, or Flop stopped enrolling new wallets. Ask Flop to renew it ([issues](https://github.com/flop-labs/network/issues), title `access: devnet gateway allowance`). Meanwhile the agent runs on OpenAI |
 | `Không thấy data/<tên>.json` (file not found) | No DID yet: `node scripts/generate-did.js <name>` |
 | `Kibble 5xx` | Kibble runs on a free server and is often slow. The agent retries on the next job |
 | Bot doesn't reply | PC is off, or `CAI-TU-CHAY.bat` / `CHAY-AGENT.bat` hasn't been run |

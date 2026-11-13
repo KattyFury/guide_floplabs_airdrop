@@ -72,6 +72,7 @@ export async function statusText(cfg, id) {
     `🏆 Điểm Kibble: ${s.score}${s.rank ? ` · hạng ${s.rank}` : ""}`,
     `📦 Hôm nay: nộp ${day.results} bài · chấm ${day.attests} bài · ${day.sessions} vòng`,
     `🔋 Token: ${day.tokens.toLocaleString("en")} / ${L.daily_tokens.toLocaleString("en")} · ≈$${day.cost.toFixed(4)} theo giá niêm yết`,
+    `⚡ FLOP đã tiêu cho compute: ${(day.flop || 0).toFixed(3)} / ${L.daily_flop || "∞"}`,
     state().paused ? "⏸️ Đang tạm dừng (/resume để chạy lại)" : "▶️ Đang chạy",
   ].join("\n");
 }
@@ -92,7 +93,7 @@ export async function dailyReport(tg, id, date, why = "") {
     [
       `📊 Báo cáo ngày ${date}`,
       `📦 Nộp ${d.results || 0} bài · ✍️ chấm ${d.attests || 0} bài (${useful} useful / ${judged.length - useful} not)`,
-      `🔋 ${(d.tokens || 0).toLocaleString("en")} token · ${d.sessions || 0} vòng · ≈$${(d.cost || 0).toFixed(4)} theo giá niêm yết`,
+      `🔋 ${(d.tokens || 0).toLocaleString("en")} token · ${d.sessions || 0} vòng · ≈$${(d.cost || 0).toFixed(4)} theo giá niêm yết · ⚡ ${(d.flop || 0).toFixed(3)} FLOP`,
       `🏆 Điểm Kibble hiện tại: ${s.score}${s.rank ? ` · hạng ${s.rank}` : ""}`,
       why ? `😴 ${why} Mai chạy tiếp.` : "",
     ]

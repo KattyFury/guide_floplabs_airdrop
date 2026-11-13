@@ -24,7 +24,7 @@ const id = loadDid(process.env.DID_LABEL);
 let running = false;
 let wake = null; // wake the loop early (on /run, /resume)
 const send = (text, chatId) => T.send(tg, text, chatId);
-onFallback((text) => send(text)); // OpenAI failed → switch to Claude backup: tell the bot owner to top up or fix the key
+onFallback((text) => send(text)); // brain switched (FLOP gateway full / allowance expired → OpenAI backup): tell the bot owner
 
 // Send the daily report once, even when the timer and the work loop both call it.
 let reporting = false;

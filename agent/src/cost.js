@@ -11,7 +11,7 @@ export function startRun(label) {
 }
 
 export function recordCall(stage, model, usage, cost, tools) {
-  const call = { stage, model, ...usage, cost: +cost.toFixed(6), tools };
+  const call = { stage, model, ...usage, cost: +cost.toFixed(6), flop: +(tools?.flop || 0).toFixed(6), brain: tools?.brain };
   if (run) run.calls.push(call);
 }
 
@@ -23,6 +23,7 @@ export function endRun(extra = {}) {
     label: run.label,
     seconds: Math.round((Date.now() - run.started) / 1000),
     cost_usd: +total.toFixed(5),
+    flop: +run.calls.reduce((s, c) => s + (c.flop || 0), 0).toFixed(5),
     calls: run.calls,
     ...extra,
   };
@@ -34,7 +35,8 @@ export function endRun(extra = {}) {
 
 export function costLine(s) {
   const tok = s.calls.reduce((a, c) => a + c.input + c.output + c.reasoning, 0);
-  return `💸 ${s.calls.length} lần gọi não · ${tok.toLocaleString("en")} token · ≈$${s.cost_usd} · ${s.seconds}s`;
+  const brains = [...new Set(s.calls.map((c) => c.brain).filter(Boolean))].join("+");
+  return `💸 ${s.calls.length} lần gọi não${brains ? ` (${brains})` : ""} · ${tok.toLocaleString("en")} token · ≈$${s.cost_usd} · ⚡ ${s.flop || 0} FLOP · ${s.seconds}s`;
 }
 
 export function todayTotal() {

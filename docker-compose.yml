@@ -1,0 +1,24 @@
+# Agent Kibble on a VPS, 24/7, brain paid in $FLOP.
+# Runs inside the OFFICIAL Flop CLI image (Node 24 + `flop` CLI), so the agent renews its ~24 h gateway key by itself.
+# Code + memory live in /opt/flop-agent (mounted at /work). The agent wallet + gateway key live in ./flop-home
+# (mounted at /root/.flop, mode 700, never in git). Deploy: node deploy/deploy.mjs
+services:
+  flop-agent:
+    image: ghcr.io/flop-labs/flop-core/cli:v0.1.321@sha256:3a473509dc0d5f9b5dfb5283a78886e285f4275274741b96a5e5575334b664e8
+    container_name: flop-agent
+    restart: unless-stopped
+    working_dir: /work/agent
+    entrypoint: ["node"]
+    command: ["bot.js"]
+    env_file: ./agent/.env
+    environment:
+      FLOP_CLI: /app/dist/cli.js
+      FLOP_KEY_FILE: /root/.flop/devnet-wallet-agent-key.json
+    volumes:
+      - ./:/work
+      - ./flop-home:/root/.flop
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

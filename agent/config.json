@@ -1,26 +1,42 @@
 {
   "_ghi_chu": "NÚM VẶN của agent. Hôm nay dùng token miễn phí của OpenAI. Khi Flop mở: đổi brain sang compute Flop.",
-
-  "brain": {
-    "_ghi_chu": "API chuẩn OpenAI. Sau này đổi base_url / model / api_key_env sang Flop.",
-    "base_url": "https://api.openai.com/v1",
-    "api_key_env": "OPENAI_API_KEY",
-    "model": "gpt-5.4-mini",
-    "reasoning_effort": "none",
-    "price": { "input": 0.75, "cached": 0.075, "output": 4.5 }
-  },
-
-  "brain_fallback": {
-    "_ghi_chu": "Não dự phòng khi OpenAI hỏng (key sai, hết tiền, quá nhanh, máy chủ lỗi). Chỉ chạy khi agent/.env có ANTHROPIC_API_KEY. Model Claude rẻ nhất; giá USD / 1 triệu token (đọc cache = 0.1×, ghi cache = 1.25× giá input).",
-    "provider": "anthropic",
-    "api_key_env": "ANTHROPIC_API_KEY",
-    "model": "claude-haiku-5-5",
-    "price": { "input": 0.1, "output": 0.5 }
-  },
+  "brains": [
+    {
+      "_ghi_chu": "Não chính: gateway FLOP. Key do CLI chính thức ghi vào key_file (hết hạn ~24h, agent tự gia hạn khi chạy trong image CLI: biến FLOP_CLI). Thử lần lượt models; 429 'pool full' → nghỉ 30 phút; hết hạn mức → nghỉ 60 phút.",
+      "name": "flop",
+      "provider": "flop",
+      "network": "devnet",
+      "base_url": "https://api.flop.network/v1",
+      "key_file": "/root/.flop/devnet-wallet-agent-key.json",
+      "key_file_env": "FLOP_KEY_FILE",
+      "models": [
+        "qwen/qwen3-14b",
+        "nousresearch/arete-27b",
+        "qwen/qwen3-8b"
+      ],
+      "max_tokens": 1500,
+      "timeout_sec": 240
+    },
+    {
+      "_ghi_chu": "Dự phòng: OpenAI (token miễn phí khi bật chia sẻ dữ liệu). Chỉ chạy khi agent/.env có OPENAI_API_KEY. Giá USD / 1 triệu token.",
+      "name": "openai",
+      "provider": "openai",
+      "base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "model": "gpt-5.4-mini",
+      "reasoning_effort": "none",
+      "price": {
+        "input": 0.75,
+        "cached": 0.075,
+        "output": 4.5
+      }
+    }
+  ],
   "limits": {
-    "_ghi_chu": "daily_tokens = trần token/ngày (OpenAI cho model mini miễn phí 2.5 triệu/ngày khi bật chia sẻ dữ liệu; để 1,5 triệu cho chắc) · daily_usd = trần tiền/ngày (tính theo giá niêm yết, phòng khi KHÔNG bật chia sẻ) · max_steps_per_job = trần bước cho 1 việc · pause_between_jobs_sec = nghỉ bao nhiêu giây giữa 2 việc · pause_when_idle_min = não xem rồi mà không có việc đáng làm thì nghỉ bao nhiêu phút · check_board_sec = bảng chưa có việc/bài mới thì bao nhiêu giây code xem lại (không tốn token).",
+    "_ghi_chu": "daily_tokens = trần token/ngày (OpenAI cho model mini miễn phí 2.5 triệu/ngày khi bật chia sẻ dữ liệu; để 1,5 triệu cho chắc) · daily_usd = trần tiền/ngày (tính theo giá niêm yết, phòng khi KHÔNG bật chia sẻ) · max_steps_per_job = trần bước cho 1 việc · pause_between_jobs_sec = nghỉ bao nhiêu giây giữa 2 việc · pause_when_idle_min = não xem rồi mà không có việc đáng làm thì nghỉ bao nhiêu phút · check_board_sec = bảng chưa có việc/bài mới thì bao nhiêu giây code xem lại (không tốn token). · daily_flop = trần $FLOP/ngày cho não FLOP (faucet ẩn danh cấp 25 FLOP/24h).",
     "daily_tokens": 1500000,
     "daily_usd": 2.5,
+    "daily_flop": 20,
     "max_steps_per_job": 14,
     "pause_between_jobs_sec": 30,
     "pause_when_idle_min": 15,

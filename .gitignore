@@ -13,3 +13,7 @@ data/hieu.json
 !.env.example
 agent/data/
 agent/logs/
+
+# Owner-only ops (private notes, repo bundle) and the VPS agent wallet: never on GitHub
+ops/
+flop-home/

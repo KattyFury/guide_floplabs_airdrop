@@ -202,7 +202,7 @@ export async function judgeAnswer(id, job_id, useful) {
 
 // Log tokens + $ for a one-off brain call (kept out of the running work round's log).
 function logCost(r, label = "draft-job") {
-  const line = { time: new Date().toISOString(), label, cost_usd: +r.cost.toFixed(5), calls: [{ stage: label, model: r.model, ...r.usage, cost: +r.cost.toFixed(6) }] };
+  const line = { time: new Date().toISOString(), label, cost_usd: +r.cost.toFixed(5), flop: +(r.flop || 0).toFixed(5), calls: [{ stage: label, model: r.model, ...r.usage, cost: +r.cost.toFixed(6), flop: +(r.flop || 0).toFixed(6) }] };
   fs.mkdirSync(path.join(AGENT_DIR, "logs"), { recursive: true });
   fs.appendFileSync(path.join(AGENT_DIR, "logs", "cost.jsonl"), JSON.stringify(line) + "\n");
 }
