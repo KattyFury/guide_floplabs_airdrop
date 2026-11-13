@@ -14,7 +14,7 @@ No token sale and no investor allocation. All 4.4 billion $FLOP at mainnet launc
 | Validator | 1.2B | Seats: up to 1,000 seats, 1.2M $FLOP each |
 | Ecosystem fund | 0.8B | Creators + referrals, builders, security bounties |
 
-**Schedule:** testnet opens **2026-11-24**, runs about 90 days → snapshot → mainnet Q1 2027 (expected).
+**Schedule:** testnet opens **2026-11-24** ([Arthur Hayes announcement](https://x.com/CryptoHayes/status/2121144411484827836)), runs about 90 days → snapshot → mainnet Q1 2027 (expected).
 Until 11-24 only **devnet** exists: open to everyone, but **no rewards and no airdrop credit**. Use it to practice.
 
 ## Which track fits you

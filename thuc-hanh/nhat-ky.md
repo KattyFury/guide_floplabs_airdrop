@@ -108,6 +108,6 @@ For anyone following this guide with an AI agent: expect to approve these comman
 
 ## 2026-11-13 · Testnet date announced
 
-- Testnet opens **2026-11-24**. Devnet stays practice-only (no rewards) until then.
+- Testnet opens **2026-11-24** (source: [Arthur Hayes on X](https://x.com/CryptoHayes/status/2121144411484827836)). Devnet stays practice-only (no rewards) until then.
 - Plan: before 11-24, keep the agent and miner wallets backed up and the DID ready, and re-check the CLI version Flop ships for testnet.
 - Repo renamed to `floplabs_guide`; the Cursor install link and GitHub Pages link were updated.
