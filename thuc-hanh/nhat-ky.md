@@ -111,3 +111,6 @@ For anyone following this guide with an AI agent: expect to approve these comman
 - Testnet opens **2026-11-24** (source: [Arthur Hayes on X](https://x.com/CryptoHayes/status/2121144411484827836)). Devnet stays practice-only (no rewards) until then.
 - Plan: before 11-24, keep the agent and miner wallets backed up and the DID ready, and re-check the CLI version Flop ships for testnet.
 - Repo renamed to `floplabs_guide`; the Cursor install link and GitHub Pages link were updated.
+- @flop_labs quote-posted the date as "2026.11.24 (tentative)". docs.flop.network (updated 11-13) still says "no replacement date is verified": the docs lag X.
+- **KOL reply from Flop (received 11-13):** no need to register or apply; the KOL partnership is open to everyone. How to get a unique ref link and the weekly KOL leaderboard details will be shared "soon".
+  → Lesson: don't wait on an approval. Build the community and the tutorial now, so ref links can go out the day they open.

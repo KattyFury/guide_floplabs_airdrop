@@ -34,7 +34,7 @@ The guide is written from this part.
 
 ## Status today (2026-11-13)
 
-- **Testnet opens 2026-11-24** ([announced by Arthur Hayes](https://x.com/CryptoHayes/status/2121144411484827836)) (runs ~90 days → snapshot). Mainnet expected Q1 2027. Until then only devnet works.
+- **Testnet / airdrop begins 2026-11-24, tentative** ([Arthur Hayes](https://x.com/CryptoHayes/status/2121144411484827836), [@flop_labs](https://x.com/flop_labs/status/2121146318135644275)). Devnet wallets and state are not carried over (runs ~90 days → snapshot). Mainnet expected Q1 2027. Until then only devnet works.
 - **Devnet is open to everyone** for practice. **No rewards**, and the chain may be reset.
 - The faucet works. Buying compute (calling AI) does not yet: the npm CLI is on a mismatched version and the gateway has no model.
 - Each guide page starts with its track's details.
