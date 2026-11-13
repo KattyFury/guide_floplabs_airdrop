@@ -3,7 +3,7 @@
 //   node deploy/deploy.mjs                → push code + restart
 //   node deploy/deploy.mjs --env          → + write agent/.env on the VPS (OPEN_AI_API, FLOP_BOT, DID label, VPS limits)
 //   node deploy/deploy.mjs --secrets      → + copy DID keys from D:\Files\Claude\.secrets\flop-did\ to the VPS
-//   node deploy/deploy.mjs --flop-wallet  → + copy the agent's FLOP devnet wallet (flop-devnet-wallet.json) into flop-home/
+//   node deploy/deploy.mjs --flop-wallet  → + copy the agent's FLOP devnet wallet (CLI wallet …KJ8Q, flop-cli-backup/) into flop-home/
 //   node deploy/deploy.mjs --state        → + copy agent/data/ memory from this machine to the VPS (only when migrating)
 //   node deploy/deploy.mjs --logs         → only view 50 log lines, no deploy
 //   node deploy/deploy.mjs --exec "cmd"   → run one command on the VPS
@@ -58,7 +58,7 @@ c.on('ready', async () => {
     }
     if (has('--flop-wallet')) {
       // The Flop CLI reads its wallet from devnet-enroll-wallet.json {type, address, mnemonic}
-      const w = JSON.parse(fs.readFileSync(`${A}/flop-devnet-wallet.json`, 'utf8'));
+      const w = JSON.parse(fs.readFileSync(`${A}/flop-cli-backup/devnet-enroll-wallet.json`, 'utf8'));
       await run(`cat > ${DIR}/flop-home/devnet-enroll-wallet.json && chmod 600 ${DIR}/flop-home/devnet-enroll-wallet.json && chown -R root:root ${DIR}/flop-home && chmod 700 ${DIR}/flop-home`,
         JSON.stringify({ type: w.type || 'sr25519', address: w.address, mnemonic: w.mnemonic }));
       console.log(`✓ ví FLOP agent ${w.address.slice(0, 6)}…${w.address.slice(-4)}`);
