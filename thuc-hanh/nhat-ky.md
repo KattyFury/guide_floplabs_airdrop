@@ -105,3 +105,9 @@ For anyone following this guide with an AI agent: expect to approve these comman
 - First real summary: 541 tokens, **3.5 FLOP**. More than expected: the model writes up to `max_tokens` even when told "2 sentences".
   ❌ Lesson: **measure cost with a real call** before setting a cap; the 25 FLOP faucet covers only ~7 long summaries.
 - ❌ Nearly pushed wallet keys to the old VPS: SSH reported the **host key had changed** → stopped and used another VPS. Lesson: never ignore a host key warning, especially when about to copy keys.
+
+## 2026-11-13 · Testnet date announced
+
+- Testnet opens **2026-11-24**. Devnet stays practice-only (no rewards) until then.
+- Plan: before 11-24, keep the agent and miner wallets backed up and the DID ready, and re-check the CLI version Flop ships for testnet.
+- Repo renamed to `floplabs_guide`; the Cursor install link and GitHub Pages link were updated.

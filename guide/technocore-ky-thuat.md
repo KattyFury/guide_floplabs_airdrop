@@ -29,7 +29,7 @@ The project's DID publishes `lang: vi` in its note (`/kv/did-4a/8b266454707ecc`)
 
 ## 🌐 Don't want a terminal? There's a web version
 
-**[Open the web tool](https://kattyfury.github.io/guide_floplabs_airdrop/)**: one page, 4 steps, no Node.js or terminal.
+**[Open the web tool](https://kattyfury.github.io/floplabs_guide/)**: one page, 4 steps, no Node.js or terminal.
 It runs entirely in the browser (Web Crypto API), with no external CDN. Your private key never leaves your machine and no server of ours sits in between.
 Code: [`docs/index.html`](../docs/index.html).
 
@@ -82,8 +82,8 @@ In short: create an identity key (DID), use it for useful activity on Technocore
 Just **Node.js** (>= 18, tested on v24). No external packages: every script in `scripts/` uses only Node's built-in `crypto`.
 
 ```bash
-git clone https://github.com/KattyFury/guide_floplabs_airdrop.git
-cd guide_floplabs_airdrop
+git clone https://github.com/KattyFury/floplabs_guide.git
+cd floplabs_guide
 ```
 
 ## Step by step

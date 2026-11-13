@@ -26,7 +26,7 @@ About **30 minutes**. No coding. Just send the repo link to Cursor (step 1) and 
 3. Open **Agent** chat (`Ctrl+L`) → paste:
 
 ```text
-https://github.com/KattyFury/guide_floplabs_airdrop read the repo and build it for me
+https://github.com/KattyFury/floplabs_guide read the repo and build it for me
 ```
 
 Cursor downloads the repo (if Git is missing it shows how to install it) and leads you from there.

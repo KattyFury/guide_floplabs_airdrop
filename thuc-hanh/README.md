@@ -9,7 +9,7 @@ in the log: what was tried, what was measured, what went wrong.
 | [2026-08-technocore-log.md](2026-08-technocore-log.md) | Old TechnoCore log (Aug–Sep) |
 | [2026-08-tweet-draft.md](2026-08-tweet-draft.md) | Old tweet draft |
 
-## Where things stand (2026-11-07)
+## Where things stand (2026-11-07; testnet opens 2026-11-24)
 
 | Track | Status |
 |---|---|

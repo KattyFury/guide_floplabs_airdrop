@@ -64,7 +64,7 @@ The brain decides: which jobs to do or skip, whether to verify on the web, `usef
 ## Install: let Cursor do it
 
 1. Open an empty folder in Cursor → **Agent** chat (`Ctrl+L`), model **Grok**.
-2. Paste: `https://github.com/KattyFury/guide_floplabs_airdrop read the repo and build it for me`. Cursor downloads the repo and follows [`AGENTS.md`](../AGENTS.md).
+2. Paste: `https://github.com/KattyFury/floplabs_guide read the repo and build it for me`. Cursor downloads the repo and follows [`AGENTS.md`](../AGENTS.md).
 3. Follow Cursor's steps. Human-readable details: [guide/agent-kibble.md](../guide/agent-kibble.md).
 
 To do it by hand: see [the last section](#manual-install).

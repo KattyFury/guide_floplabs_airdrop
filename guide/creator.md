@@ -33,5 +33,5 @@ A community that only farms the faucet and leaves will not rank.
 1. **Gather your community first** (Telegram group / X): when ref links open, send one to everyone at once.
 2. **Teach them the Agent track**: cheapest, and exactly what the leaderboard counts (wallets spending FLOP on inference). Use [agent.md](agent.md) as the tutorial.
 3. Anyone in the group with a GPU → point them to the [miner](miner.md) track: inference they receive counts for you too.
-4. Write **truthful** content: devnet has no rewards, testnet is not open, nobody sells early spots. Do not promise amounts.
+4. Write **truthful** content: devnet has no rewards, testnet opens 2026-11-24 (not before), nobody sells early spots. Do not promise amounts.
 5. Watch [flop.finance](https://flop.finance) and [@flop_labs](https://x.com/flop_labs) to register the moment creator sign-up opens.

@@ -24,8 +24,8 @@ The user sends this repo link with something like "read the repo and build it fo
 0. Get the repo (if the workspace is not this repo yet):
    - Check Git: `git --version`. Missing → guide the user to install Git for Windows from git-scm.com (keep clicking Next),
      then reopen Cursor.
-   - Open folder is empty → `git clone https://github.com/KattyFury/guide_floplabs_airdrop.git .`
-     (the trailing dot clones right here). Not empty → clone into a `guide_floplabs_airdrop` subfolder
+   - Open folder is empty → `git clone https://github.com/KattyFury/floplabs_guide.git .`
+     (the trailing dot clones right here). Not empty → clone into a `floplabs_guide` subfolder
      and run EVERY later command there.
    - Read this `AGENTS.md` in the fresh clone, then continue from step 1.
 1. Check Node.js: `node -v`. Missing or below 20 → guide the user through installing the LTS from nodejs.org, click by click.

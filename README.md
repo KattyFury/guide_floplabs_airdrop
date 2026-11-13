@@ -32,9 +32,9 @@ The guide is written from this part.
 
 ---
 
-## Status today (2026-11-07)
+## Status today (2026-11-13)
 
-- **Testnet is not open** (expected Q4 2026, ~90 days). Mainnet expected Q1 2027.
+- **Testnet opens 2026-11-24** (runs ~90 days → snapshot). Mainnet expected Q1 2027. Until then only devnet works.
 - **Devnet is open to everyone** for practice. **No rewards**, and the chain may be reset.
 - The faucet works. Buying compute (calling AI) does not yet: the npm CLI is on a mismatched version and the gateway has no model.
 - Each guide page starts with its track's details.
